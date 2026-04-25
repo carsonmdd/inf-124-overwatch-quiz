@@ -1,9 +1,11 @@
 import React from 'react';
 
-type Props = {};
-
-const Quiz = (props: Props) => {
-	return <div className="border border-red-500">Quiz</div>;
+const Quiz = () => {
+	return (
+		<div className="flex-1 flex items-center justify-center">
+			<h1 className="text-4xl font-black uppercase italic">Quiz</h1>
+		</div>
+	);
 };
 
 export default Quiz;

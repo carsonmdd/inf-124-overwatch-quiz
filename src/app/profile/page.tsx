@@ -1,9 +1,11 @@
 import React from 'react';
 
-type Props = {};
-
-const Profile = (props: Props) => {
-	return <div>Profile</div>;
+const Profile = () => {
+	return (
+		<div className="flex-1 flex items-center justify-center">
+			<h1 className="text-4xl font-black uppercase italic">Profile</h1>
+		</div>
+	);
 };
 
 export default Profile;
