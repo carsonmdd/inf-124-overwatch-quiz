@@ -30,43 +30,44 @@ const achievementList = [
 	},
 ];
 
-const Achievement = () => {
+const Achievements = () => {
 	// useEffect(() => {
 	// 	// Pull achievement data from database
 	// }, []);
 
 	return (
-		// Achievement box
-		<div className="bg-red-400 w-[400px] h-[100px] ml-[575px] mb-[300px]">
-			<div className="achievement-name">
-				{achievementList[1].achievementName}
-			</div>
-
-			<div>{achievementList[1].achievementDescription}</div>
-
-			{/* Achievement image */}
-			<div className="ml-[350px] mt-[5px] rounded-[10px] bg-gray-500 w-fit">
-				<Image
-					width={50}
-					height={50}
-					src="/hat.png"
-					alt="Achievement image"
-				/>
-			</div>
-
-			{/* Achievement checkmark */}
-			{achievementList[1].isAchieved && (
-				<div className="ml-[350px]">
+		<div className="flex flex-col items-center justify-center gap-6 p-8">
+			{achievementList.map((a, index) => (
+				<div key={index} className="flex gap-6">
+					<div
+						className={`${a.isAchieved ? 'bg-green-500' : 'bg-red-500'} w-150 h-24 flex justify-between gap-4 p-6`}
+					>
+						<div>
+							<h2 className="text-xl font-bold mb-1">
+								{a.achievementName}
+							</h2>
+							<p className="text-lg">
+								{a.achievementDescription}
+							</p>
+						</div>
+						<Image
+							width={50}
+							height={50}
+							src="/hat.png"
+							alt="Achievement image"
+							className="rounded-full bg-gray-300 p-1"
+						/>
+					</div>
 					<Image
-						width={30}
-						height={30}
+						width={40}
+						height={40}
 						src="/checkMark-svgrepo.svg"
 						alt="Achievement checkmark"
 					/>
 				</div>
-			)}
+			))}
 		</div>
 	);
 };
 
-export default Achievement;
+export default Achievements;
