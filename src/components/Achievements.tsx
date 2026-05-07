@@ -1,72 +1,67 @@
 import Image from 'next/image';
+import Link from 'next/link';
+import type { Achievement } from '@/data/mockProfileData';
 
-// Hardcoded achievements for now; will pull from database later
-const achievementList = [
-	{
-		achievementName: 'Just Getting Started!',
-		achievementDescription:
-			'Earn a total of 1000 lifetime points in Overwatch Quiz Game.',
-		isAchieved: false,
-		badgeIcon: 'src here',
-	},
-	{
-		achievementName: 'Hat Trick',
-		achievementDescription: 'Get 3 questions correct in a row.',
-		isAchieved: true,
-		badgeIcon: 'src here',
-	},
-	{
-		achievementName: 'My First Quiz!',
-		achievementDescription: 'Complete your very first overwatch quiz!',
-		isAchieved: true,
-		badgeIcon: 'src here',
-	},
-	{
-		achievementName: 'Quite Poor Performance',
-		achievementDescription:
-			'Earn a 10% score or less in a single Overwatch Quiz.',
-		isAchieved: false,
-		badgeIcon: 'src here',
-	},
-];
+interface AchievementsProps {
+	achievements: Achievement[];
+	featured?: boolean;
+	viewAllHref?: string;
+}
 
-const Achievements = () => {
-	// useEffect(() => {
-	// 	// Pull achievement data from database
-	// }, []);
+const Achievements = ({
+	achievements,
+	featured = false,
+	viewAllHref,
+}: AchievementsProps) => {
+	const displayed = featured ? achievements.slice(0, 3) : achievements;
 
 	return (
-		<div className="flex flex-col items-center justify-center gap-6 p-8">
-			{achievementList.map((a, index) => (
-				<div key={index} className="flex gap-6">
-					<div
-						className={`${a.isAchieved ? 'bg-green-500' : 'bg-red-500'} w-150 h-24 flex justify-between gap-4 p-6`}
+		<section className="w-full">
+			<div className="flex justify-between items-baseline mb-4">
+				<h2 className="text-2xl font-black uppercase italic tracking-wider text-ow-dark-blue dark:text-white">
+					Achievements
+				</h2>
+				{featured && viewAllHref && (
+					<Link
+						href={viewAllHref}
+						className="text-ow-orange font-bold uppercase text-sm hover:underline"
 					>
-						<div>
-							<h2 className="text-xl font-bold mb-1">
-								{a.achievementName}
-							</h2>
-							<p className="text-lg">
-								{a.achievementDescription}
-							</p>
+						View All
+					</Link>
+				)}
+			</div>
+			<div className="flex flex-col items-center justify-center gap-6">
+				{displayed.map((a, index) => (
+					<div key={index} className="flex gap-6">
+						<div
+							className={`${a.isAchieved ? 'bg-green-500' : 'bg-red-500'} w-150 h-24 flex justify-between gap-4 p-6`}
+						>
+							<div>
+								<h2 className="text-xl font-bold mb-1">
+									{a.achievementName}
+								</h2>
+								<p className="text-lg">
+									{a.achievementDescription}
+								</p>
+							</div>
+							<Image
+								width={50}
+								height={50}
+								src={a.badgeIcon}
+								alt="Achievement image"
+								className="rounded-full bg-gray-300 p-1"
+							/>
 						</div>
 						<Image
-							width={50}
-							height={50}
-							src="/hat.png"
-							alt="Achievement image"
-							className="rounded-full bg-gray-300 p-1"
+							width={40}
+							height={40}
+							src="/checkMark-svgrepo.svg"
+							alt="Achievement checkmark"
 						/>
 					</div>
-					<Image
-						width={40}
-						height={40}
-						src="/checkMark-svgrepo.svg"
-						alt="Achievement checkmark"
-					/>
-				</div>
-			))}
-		</div>
+				))}
+			</div>
+		</section>
 	);
 };
 
