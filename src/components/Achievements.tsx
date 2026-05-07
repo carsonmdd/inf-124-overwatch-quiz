@@ -18,9 +18,6 @@ const Achievements = ({
 	return (
 		<section className="w-full">
 			<div className="flex justify-between items-baseline mb-4">
-				<h2 className="text-2xl font-black uppercase italic tracking-wider text-ow-dark-blue dark:text-white">
-					Achievements
-				</h2>
 				{featured && viewAllHref && (
 					<Link
 						href={viewAllHref}
