@@ -1,13 +1,10 @@
 import { notFound } from 'next/navigation';
-import Achievements from '@/components/Achievements';
+import Achievements from '@/components/profile/Achievements';
 import ProfileHeader from '@/components/profile/ProfileHeader';
 import ProfileStats from '@/components/profile/ProfileStats';
 import PersonalBests from '@/components/profile/PersonalBests';
 import CreatedQuizzes from '@/components/profile/CreatedQuizzes';
-import {
-	CURRENT_USER_ID,
-	getUserById,
-} from '@/data/mockProfileData';
+import { CURRENT_USER_ID, getUserById } from '@/data/mockProfileData';
 
 export default async function UserProfilePage({
 	params,

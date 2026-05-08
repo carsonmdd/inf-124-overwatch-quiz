@@ -1,4 +1,4 @@
-import Achievements from '@/components/Achievements';
+import Achievements from '@/components/profile/Achievements';
 import ProfileHeader from '@/components/profile/ProfileHeader';
 import ProfileStats from '@/components/profile/ProfileStats';
 import PersonalBests from '@/components/profile/PersonalBests';
