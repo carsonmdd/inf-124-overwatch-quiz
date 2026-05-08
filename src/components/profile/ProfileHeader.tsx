@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import type { ProfileUser } from '@/data/mockProfileData';
+import type { ProfileUser } from '@/types/profile';
 
 interface ProfileHeaderProps {
 	user: ProfileUser;

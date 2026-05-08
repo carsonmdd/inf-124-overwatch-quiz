@@ -1,4 +1,4 @@
-import type { ProfileUser } from '@/data/mockProfileData';
+import type { ProfileUser } from '@/types/profile';
 
 interface ProfileStatsProps {
 	user: ProfileUser;

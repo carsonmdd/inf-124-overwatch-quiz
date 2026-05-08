@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { CreatedQuiz } from '@/data/mockProfileData';
+import type { CreatedQuiz } from '@/types/profile';
 
 interface CreatedQuizzesProps {
 	quizzes: CreatedQuiz[];

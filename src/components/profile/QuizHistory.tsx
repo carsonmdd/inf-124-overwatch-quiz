@@ -1,4 +1,4 @@
-import type { QuizAttempt } from '@/data/mockProfileData';
+import type { QuizAttempt } from '@/types/profile';
 
 interface QuizHistoryProps {
 	history: QuizAttempt[];

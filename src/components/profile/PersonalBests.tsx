@@ -1,4 +1,4 @@
-import type { PersonalBest } from '@/data/mockProfileData';
+import type { PersonalBest } from '@/types/profile';
 
 interface PersonalBestsProps {
 	personalBests: PersonalBest[];

@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Check, Lock, Trophy } from 'lucide-react';
-import type { Achievement } from '@/data/mockProfileData';
+import type { Achievement } from '@/types/profile';
 
 interface AchievementsProps {
 	achievements: Achievement[];
