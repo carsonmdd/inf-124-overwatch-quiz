@@ -4,7 +4,7 @@ export default function Home() {
 	return (
 		<div className="flex-1 flex flex-col items-center justify-center px-4 py-12 text-center">
 			<div className="max-w-4xl w-full">
-				<h1 className="text-6xl md:text-8xl font-black uppercase italic tracking-tighter text-ow-dark-blue dark:text-white mb-4">
+				<h1 className="text-6xl md:text-4xl sm:text-2xl font-black uppercase italic tracking-tighter text-ow-dark-blue dark:text-white mb-4">
 					Are you a{' '}
 					<span className="text-ow-orange">Grandmaster?</span>
 				</h1>
