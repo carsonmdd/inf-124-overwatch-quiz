@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 
-// temp data for leaderboard. General idea
 const mockData = Array.from({ length: 35 }, (_, i) => ({
     id: i + 1,
     rank: i + 1,
@@ -44,9 +43,8 @@ const Leaderboard = () => {
                 </h1>
             </div>
 
-            <div className="flex flex-col gap-4">
+            <ol className="flex flex-col gap-4">
                 {currentPlayers.map((player) => {
-                    // handles top 3 styling
                     let specialStyling = "bg-ow-blue/5 dark:bg-ow-blue/10 text-gray-400 border-gray-600/30"; 
                     let rankTextStyling = "text-gray-500";
 
@@ -62,52 +60,56 @@ const Leaderboard = () => {
                     }
 
                     return (
-                        <div 
+                        <li 
                             key={player.id} 
-                            className={`relative z-0 hover:z-10 flex items-center gap-4 p-4 rounded-sm border-l-4 transition-all duration-200 hover:scale-[1.02] hover:shadow-lg ${specialStyling}`}
+                            tabIndex={0}
+                            aria-label={`Rank ${player.rank}, ${player.name}, Score ${player.score.toLocaleString()} points`}
+                            className={`relative z-0 hover:z-10 focus:z-10 focus:outline-none focus:ring-2 focus:ring-ow-orange focus:scale-[1.02] focus:shadow-lg flex items-center gap-4 p-4 rounded-sm border-l-4 transition-all duration-200 hover:scale-[1.02] hover:shadow-lg ${specialStyling}`}
                         >
                             <div className="w-16 flex justify-center items-center">
-                                <span className={`font-black text-3xl italic ${rankTextStyling}`}>
+                                <span className={`font-black text-3xl italic ${rankTextStyling}`} aria-hidden="true">
                                     {player.rank}
                                 </span>
                             </div>
 
                             <div className="flex-1 min-w-0">
-                                <h3 className={`font-black uppercase tracking-widest text-xl mb-0.5 ${player.rank <= 3 ? 'text-white' : 'text-gray-300'}`}>
+                                <h3 className={`font-black uppercase tracking-widest text-xl mb-0.5 ${player.rank <= 3 ? 'text-white' : 'text-gray-300'}`} aria-hidden="true">
                                     {player.name}
                                 </h3>
                             </div>
 
-                            <div className="shrink-0 font-black italic tracking-wider text-2xl pr-4">
-                                <span className={player.rank <= 3 ? 'text-white' : 'text-gray-300'}>{player.score}</span> 
+                            <div className="shrink-0 font-black italic tracking-wider text-2xl pr-4" aria-hidden="true">
+                                <span className={player.rank <= 3 ? 'text-white' : 'text-gray-300'}>{player.score.toLocaleString()}</span> 
                                 <span className="text-sm text-ow-orange ml-1 opacity-80">PTS</span>
                             </div>
-                        </div>
+                        </li>
                     );
                 })}
-            </div>
+            </ol>
 
-            <div className="flex justify-between items-center mt-6 p-4 bg-ow-blue/5 rounded-sm border border-gray-700/30">
+            <nav aria-label="Leaderboard Pagination" className="flex justify-between items-center mt-6 p-4 bg-ow-blue/5 rounded-sm border border-gray-700/30">
                 <button 
                     onClick={handlePrev}
                     disabled={currentPage === 1}
-                    className="flex items-center gap-2 px-6 py-3 bg-ow-dark-blue text-white hover:bg-ow-orange disabled:opacity-20 disabled:hover:bg-ow-dark-blue rounded-sm uppercase italic font-bold tracking-wider transition-colors"
+                    aria-label="Go to previous page"
+                    className="flex items-center gap-2 px-6 py-3 bg-ow-dark-blue text-white hover:bg-ow-orange focus:outline-none focus:ring-2 focus:ring-ow-orange disabled:opacity-20 disabled:hover:bg-ow-dark-blue rounded-sm uppercase italic font-bold tracking-wider transition-colors"
                 >
-                    <ChevronLeft className="w-5 h-5" /> Prev
+                    <ChevronLeft className="w-5 h-5" aria-hidden="true" /> Prev
                 </button>
                 
-                <span className="font-black text-xl italic tracking-widest text-gray-400">
-                    {currentPage} <span className="text-ow-orange mx-2">/</span> {totalPages}
+                <span aria-live="polite" className="font-black text-xl italic tracking-widest text-gray-400">
+                    {currentPage} <span className="text-ow-orange mx-2" aria-hidden="true">/</span> {totalPages}
                 </span>
 
                 <button 
                     onClick={handleNext}
                     disabled={currentPage === totalPages}
-                    className="flex items-center gap-2 px-6 py-3 bg-ow-dark-blue text-white hover:bg-ow-orange disabled:opacity-20 disabled:hover:bg-ow-dark-blue rounded-sm uppercase italic font-bold tracking-wider transition-colors"
+                    aria-label="Go to next page"
+                    className="flex items-center gap-2 px-6 py-3 bg-ow-dark-blue text-white hover:bg-ow-orange focus:outline-none focus:ring-2 focus:ring-ow-orange disabled:opacity-20 disabled:hover:bg-ow-dark-blue rounded-sm uppercase italic font-bold tracking-wider transition-colors"
                 >
-                    Next <ChevronRight className="w-5 h-5" />
+                    Next <ChevronRight className="w-5 h-5" aria-hidden="true" />
                 </button>
-            </div>
+            </nav>
             
         </div>
     );
