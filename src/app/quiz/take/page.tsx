@@ -8,7 +8,8 @@ const Quiz = () => {
     const totalQuestions = 10;
     const score = 0;
     const questionType = "Abilities";
-    const questionText = "What is the name of Cassidy's ability with this description: Roll in the direction you're moving and reload.";
+    const questionText1 = "What is the name of Cassidy's ability with this description:";
+    const questionText2 = "Roll in the direction you're moving and reload.";
     const answers = [
         { letter: 'A', text: "Combat Roll" },
         { letter: 'B', text: "Spurs" },
@@ -42,8 +43,11 @@ const Quiz = () => {
                     <p className="text-ow-orange text-[10px] font-medium tracking-[0.28em] uppercase">
                         {questionType} {/*HARDCODED*/}
                     </p>
+                    <h2 className="text-ow-light-blue italic font-black uppercase leading-tight tracking-wide">
+                        {questionText1}
+                    </h2>
                     <h1 className="text-white font-black text-3xl uppercase leading-tight tracking-wide">
-                        {questionText}
+                        {questionText2}
                     </h1>
                 </div>
                 {/*Picture. Replace all ts with actual pictures*/}
