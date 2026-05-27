@@ -1,0 +1,150 @@
+// IMPORT NEEDED TYPES
+// ex: import { type Question, type Answer, Difficulty, Category } from '@prisma/client';
+
+// tell Prisma to generate TS client when "npx prisma generate" is run
+// Basically auto generates a bunch of TS types/interfaces that update in
+// parallel whenever this schema is updated. it's handy. 
+generator client {
+  provider = "prisma-client-js"
+}
+
+// tell where DB is
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Prisma enums become PostgreSQL enums and TS types (like interfaces to export)
+// UPPERCASE BY CONVENTION
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum Category {
+  MAP_TYPE
+  HERO_IDENTIFICATION
+  MAP_IDENTIFICATION
+  HERO_HEALTH
+  MINOR_PERK
+  MAJOR_PERK
+  HERO_ABILITY
+  HERO_SUBROLE
+  HERO_LOCATION
+  MAP_LOCATION
+  HERO_ARMOR_SHIELDS
+  CUSTOM
+}
+
+// Prisma models become PostgreSQL tables and TS interfaces
+model Question {
+  // models a question
+  id              Int       @id @default(autoincrement())
+  questionText    String
+  questionContext String?
+  category        Category
+  difficulty      Difficulty
+  subjectName     String?
+  overfastKey     String?
+  imageUrl        String?
+  createdAt       DateTime  @default(now())
+
+  // relation fields define JOIN instructions in SQL and an optional field in
+  // JSON objects when included in TS
+  answers         Answer[]
+  attemptAnswers  AttemptAnswer[]
+
+  @@index([difficulty])
+  @@index([category, difficulty])
+}
+
+model Answer {
+  // models a single answer to a question, right or wrong
+  // one Question always has many (4) Answers
+  id              Int       @id @default(autoincrement())
+  questionId      Int
+  answerText      String
+  isCorrect       Boolean   @default(false)
+  displayOrder    Int
+
+  question        Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  attemptAnswers  AttemptAnswer[]
+
+  @@index([questionId, isCorrect])
+}
+
+model User {
+  // models a user
+  id                String    @id @default(uuid())
+  clerkId           String    @unique
+  username          String    @unique
+  createdAt         DateTime  @default(now())
+  // Note: you can get a user's life time score by adding all of their 
+  // results from each of their quiz attempts
+  // SELECT SUM(score) FROM quiz_attempts WHERE user_id = X
+
+  quizAttempts      QuizAttempt[]
+  userAchievements  UserAchievement[]
+}
+
+model QuizAttempt {
+  // models a single quiz attempt
+  // one User can have 0 or many QuizAttempts
+  id              String    @id @default(uuid())
+  userId          String
+  completedAt     DateTime  @default(now())
+  score           Int       @default(0)
+
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attemptAnswers  AttemptAnswer[]
+
+  @@index([userId])
+  @@index([score])
+  @@index([userId, score])
+}
+
+model AttemptAnswer {
+  // models one of a user's answers to a quiz that they've taken
+  // one QuizAttempt has many (10) attemptAnswers
+  id              String        @id @default(uuid())
+  attemptId       String
+  questionId      Int
+  answerId        Int
+
+  isCorrect       Boolean
+
+  attempt         QuizAttempt   @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question        Question      @relation(fields: [questionId], references: [id])
+  answer          Answer        @relation(fields: [answerId], references: [id])
+}
+
+model Achievement {
+  id                Int     @id @default(autoincrement())
+  name              String  @unique
+  description       String
+  badgeIcon         String
+
+  userAchievements  UserAchievement[]
+}
+
+model UserAchievement {
+  id            String      @id @default(uuid())
+  userId        String
+  achievementId Int
+  earnedAt      DateTime    @default(now())
+
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement   Achievement @relation(fields: [achievementId], references: [id])
+
+  @@unique([userId, achievementId])
+}
+
+// To get a user's life time score: 
+// add all of a user's score from each of their quiz attempts
+// SELECT SUM(score) FROM quiz_attempts WHERE user_id = X
+
+// To get top scores among all users (for leaderboard): 
+// query for a user's total score (by adding their score from all of 
+// their quiz attempts), then order results by top X descending
