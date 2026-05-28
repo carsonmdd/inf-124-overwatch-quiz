@@ -1,10 +1,15 @@
 import Image from 'next/image'
 import Link from 'next/link';
+import { User } from 'lucide-react';
+import { auth } from '@clerk/nextjs/server';
 
-const QuizHub = () => {
+const QuizHub = async () => {
+	const { userId } = await auth();
+	const isSignedIn = !!userId;
+
 	return (
 		<div className="flex min-h-screen w-full items-center justify-center p-6">
-			<div className="grid grid-cols-1 md:grid-cols-3 gap-5 w-full max-w-3xl mx-auto p-6">
+			<div className={`grid grid-cols-1 gap-5 w-full max-w-3xl mx-auto p-6 ${isSignedIn ? 'md:grid-cols-2' : 'md:grid-cols-3'}`}>
 				{/*Quiz History*/}
 				<div className="group flex flex-col gap-5 border border-white/[0.08] rounded-xl p-7 cursor-pointer transition-transform duration-200 hover:-translate-y-1.5 hover:border-white/25">
 					<div className="w-11 h-11 rounded-lg bg-white/5 flex items-center justify-center transition-colors group-hover:bg-white/10">
@@ -55,26 +60,30 @@ const QuizHub = () => {
 						</div>
 					</div>
 				</Link>
-				{/*Create Quiz (or a different feature we decide on)*/}
-				<div className="group flex flex-col gap-5 border border-white/[0.08] rounded-xl p-7 cursor-pointer transition-transform duration-200 hover:-translate-y-1.5 hover:border-white/25">
-					<div className="w-11 h-11 rounded-lg bg-white/5 flex items-center justify-center transition-colors group-hover:bg-white/10">
-						{/*Include graphic/icon here*/} Icon
-					</div>
+				{/*Play as Guest — hidden for signed-in users*/}
+				{!isSignedIn && (
+					<Link href="/quiz/guest" className="contents">
+						<div className="group flex flex-col gap-5 border border-white/[0.08] rounded-xl p-7 cursor-pointer transition-transform duration-200 hover:-translate-y-1.5 hover:border-white/25">
+							<div className="w-11 h-11 rounded-lg bg-white/5 flex items-center justify-center transition-colors group-hover:bg-white/10">
+								<User className="w-5 h-5 text-white/40 group-hover:text-white/70 transition-colors" />
+							</div>
 
-					<div className="flex-1">
-						<h2 className="text-white text-2xl font-bold uppercase tracking-wide leading-tight mb-2.5">
-							Quiz History
-						</h2>
-						<p className="text-white/35 text-[13px] leading-relaxed transition-colors duration-200 hover:text-white/70">
-							Revisit scores, review past attempts, and track your improvement.
-						</p>
-					</div>
+							<div className="flex-1">
+								<h2 className="text-white text-2xl font-bold uppercase tracking-wide leading-tight mb-2.5">
+									Play as Guest
+								</h2>
+								<p className="text-white/35 text-[13px] leading-relaxed transition-colors duration-200 hover:text-white/70">
+									Try 5 dynamic questions without an account. No score saved.
+								</p>
+							</div>
 
-					<div className="flex items-center gap-1 text-white/40 text-[11px] font-medium tracking-widest uppercase opacity-50 group-hover:opacity-100 transition-opacity">
-						<span>Open</span>
-						<span className="text-sm">→</span>
-					</div>
-				</div>
+							<div className="flex items-center gap-1 text-white/40 text-[11px] font-medium tracking-widest uppercase opacity-50 group-hover:opacity-100 transition-opacity">
+								<span>Play Now</span>
+								<span className="text-sm">→</span>
+							</div>
+						</div>
+					</Link>
+				)}
 				
 			</div>
 		</div>

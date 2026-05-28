@@ -9,3 +9,16 @@ export interface Question {
     questionTitle: string;
     answerChoices: AnswerChoice[];
 }
+
+export interface GuestAnswer {
+    text: string;
+    isCorrect: boolean;
+}
+
+export interface GuestQuestion {
+    id: number;
+    text: string;
+    category: string;
+    imageUrl: string | null;
+    answers: GuestAnswer[];
+}
