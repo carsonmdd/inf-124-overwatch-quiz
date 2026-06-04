@@ -5,6 +5,7 @@ import ProfileStats from '@/components/profile/ProfileStats';
 import PersonalBests from '@/components/profile/PersonalBests';
 import CreatedQuizzes from '@/components/profile/CreatedQuizzes';
 import { CURRENT_USER_ID, getUserById } from '@/data/mockProfileData';
+import QuizHistory from '@/components/profile/QuizHistory';
 
 export default async function UserProfilePage({
 	params,
@@ -29,6 +30,7 @@ export default async function UserProfilePage({
 				viewAllHref={`/profile/${user.id}/achievements`}
 			/>
 			<CreatedQuizzes quizzes={user.createdQuizzes} isOwner={isOwner} />
+			<QuizHistory history={user.quizHistory} />
 		</div>
 	);
 }
