@@ -1,10 +1,18 @@
 import { notFound } from 'next/navigation';
+import { unstable_cache } from 'next/cache';
 import { clerkClient } from '@clerk/nextjs/server';
+import type { Achievement } from '@prisma/client';
 import { db } from '@/lib/db';
 import ProfileHeader from '@/components/profile/ProfileHeader';
 import ProfileStats from '@/components/profile/ProfileStats';
 import QuizHistory from '@/components/profile/QuizHistory';
 import Achievements from '@/components/profile/Achievements';
+
+const getAllAchievements = unstable_cache(
+	(): Promise<Achievement[]> => db.achievement.findMany(),
+	['all-achievements'],
+	{ revalidate: 3600 },
+);
 
 export default async function UserProfilePage({
 	params,
@@ -12,8 +20,9 @@ export default async function UserProfilePage({
 	params: Promise<{ userId: string }>;
 }) {
 	const { userId } = await params;
+	const clerk = await clerkClient();
 
-	const [dbUser, allAchievements] = await Promise.all([
+	const [dbUser, allAchievements, clerkUser] = await Promise.all([
 		db.user.findUnique({
 			where: { clerkId: userId },
 			include: {
@@ -21,13 +30,11 @@ export default async function UserProfilePage({
 				userAchievements: { include: { achievement: true } },
 			},
 		}),
-		db.achievement.findMany(),
+		getAllAchievements(),
+		clerk.users.getUser(userId),
 	]);
 
 	if (!dbUser) notFound();
-
-	const clerk = await clerkClient();
-	const clerkUser = await clerk.users.getUser(userId);
 
 	const attempts = dbUser.quizAttempts;
 	const lifetimePoints = attempts.reduce((s, a) => s + a.score, 0);

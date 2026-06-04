@@ -3,17 +3,18 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Show, SignInButton, UserButton } from '@clerk/nextjs';
+import { Show, SignInButton, UserButton, useAuth } from '@clerk/nextjs';
 
 const Navbar = () => {
 	const pathname = usePathname();
 	const [menuOpen, setMenuOpen] = useState(false);
+	const { userId } = useAuth();
 
 	const links = [
 		{ name: 'Quiz', href: '/quiz' },
 		{ name: 'Leaderboard', href: '/leaderboard' },
 		{ name: 'About', href: '/about' },
-		{ name: 'Profile', href: '/profile' },
+		...(userId ? [{ name: 'Profile', href: `/profile/${userId}` }] : []),
 	];
 
 	return (

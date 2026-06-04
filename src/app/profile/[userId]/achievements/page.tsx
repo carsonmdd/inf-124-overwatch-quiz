@@ -9,16 +9,18 @@ export default async function AchievementsPage({
 }) {
 	const { userId } = await params;
 
-	const dbUser = await db.user.findUnique({
-		where: { id: userId },
-		include: {
-			userAchievements: { include: { achievement: true } },
-		},
-	});
+	const [dbUser, allAchievements] = await Promise.all([
+		db.user.findUnique({
+			where: { clerkId: userId },
+			include: {
+				userAchievements: { include: { achievement: true } },
+			},
+		}),
+		db.achievement.findMany(),
+	]);
 
 	if (!dbUser) notFound();
 
-	const allAchievements = await db.achievement.findMany();
 	const earnedIds = new Set(
 		dbUser.userAchievements.map((ua) => ua.achievementId),
 	);
