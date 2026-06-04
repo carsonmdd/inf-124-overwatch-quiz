@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
-import { auth, clerkClient } from '@clerk/nextjs/server';
-import { prisma } from '@/lib/db';
+import { clerkClient } from '@clerk/nextjs/server';
+import { db } from '@/lib/db';
 import ProfileHeader from '@/components/profile/ProfileHeader';
 import ProfileStats from '@/components/profile/ProfileStats';
 import QuizHistory from '@/components/profile/QuizHistory';
@@ -12,34 +12,35 @@ export default async function UserProfilePage({
 	params: Promise<{ userId: string }>;
 }) {
 	const { userId } = await params;
-	const { userId: viewerClerkId } = await auth();
 
-	const dbUser = await prisma.user.findUnique({
-		where: { id: userId },
-		include: {
-			quizAttempts: { orderBy: { completedAt: 'desc' } },
-			userAchievements: { include: { achievement: true } },
-		},
-	});
+	const [dbUser, allAchievements] = await Promise.all([
+		db.user.findUnique({
+			where: { clerkId: userId },
+			include: {
+				quizAttempts: { orderBy: { completedAt: 'desc' } },
+				userAchievements: { include: { achievement: true } },
+			},
+		}),
+		db.achievement.findMany(),
+	]);
 
 	if (!dbUser) notFound();
 
 	const clerk = await clerkClient();
-	const clerkUser = await clerk.users.getUser(dbUser.clerkId);
+	const clerkUser = await clerk.users.getUser(userId);
 
 	const attempts = dbUser.quizAttempts;
 	const lifetimePoints = attempts.reduce((s, a) => s + a.score, 0);
 	const bestScore =
 		attempts.length > 0 ? Math.max(...attempts.map((a) => a.score)) : 0;
 
-	const betterUsers = await prisma.quizAttempt.groupBy({
+	const betterUsers = await db.quizAttempt.groupBy({
 		by: ['userId'],
 		_sum: { score: true },
 		having: { score: { _sum: { gt: lifetimePoints } } },
 	});
 	const globalRank = betterUsers.length + 1;
 
-	const allAchievements = await prisma.achievement.findMany();
 	const earnedIds = new Set(
 		dbUser.userAchievements.map((ua) => ua.achievementId),
 	);
@@ -56,8 +57,6 @@ export default async function UserProfilePage({
 		completedAt: a.completedAt.toISOString(),
 	}));
 
-	const isOwner = viewerClerkId === dbUser.clerkId;
-
 	return (
 		<div className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-8">
 			<ProfileHeader
@@ -65,7 +64,6 @@ export default async function UserProfilePage({
 				avatarUrl={clerkUser.imageUrl}
 				joinDate={dbUser.createdAt.toISOString()}
 				globalRank={globalRank}
-				isOwner={isOwner}
 			/>
 			<ProfileStats
 				lifetimePoints={lifetimePoints}

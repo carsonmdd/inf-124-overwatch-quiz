@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import Achievements from '@/components/profile/Achievements';
 
 export default async function AchievementsPage({
@@ -9,7 +9,7 @@ export default async function AchievementsPage({
 }) {
 	const { userId } = await params;
 
-	const dbUser = await prisma.user.findUnique({
+	const dbUser = await db.user.findUnique({
 		where: { id: userId },
 		include: {
 			userAchievements: { include: { achievement: true } },
@@ -18,8 +18,10 @@ export default async function AchievementsPage({
 
 	if (!dbUser) notFound();
 
-	const allAchievements = await prisma.achievement.findMany();
-	const earnedIds = new Set(dbUser.userAchievements.map((ua) => ua.achievementId));
+	const allAchievements = await db.achievement.findMany();
+	const earnedIds = new Set(
+		dbUser.userAchievements.map((ua) => ua.achievementId),
+	);
 	const achievements = allAchievements.map((a) => ({
 		name: a.name,
 		description: a.description,
