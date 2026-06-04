@@ -1,11 +1,16 @@
 // quiz server component
 // fetches questions from DB before page renders
 
+import { auth } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
 import { db } from '@/lib/db'; // use Prisma singleton
 import { buildQuiz } from '@/lib/utils';
-import QuizClient from './QuizClient';  
+import QuizClient from './QuizClient';
 
 const Quiz = async () => {
+    const { userId } = await auth();
+    if (!userId) redirect('/quiz');
+
     // fetch all questions. ok since we have like 10
     const [easyq, mediumq, hardq] = await Promise.all([
         db.question.findMany({
