@@ -1,7 +1,22 @@
-import { PrismaClient } from '@prisma/client';
+// Define Prisma singleton to not exhaust Prisma tokens across hot reloads
+// during development
 
-const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
+// import {db} from "@/lib/db";
 
-export const prisma = globalForPrisma.prisma ?? new PrismaClient();
+import { PrismaClient } from "@prisma/client";
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+const globalForPrisma = globalThis as unknown as {
+    prisma: PrismaClient | undefined;
+};
+
+export const db = 
+    globalForPrisma.prisma // will reuse client if it's already been created
+    ?? new PrismaClient({
+        log: ["query", "error"] // will log errors & queries
+    });
+
+// store prisma client so it survives hot reloads
+// only necessary in production
+if (process.env.NODE_ENV !== "production") {
+    globalForPrisma.prisma = db;
+}

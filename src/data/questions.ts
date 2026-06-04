@@ -42,7 +42,7 @@ export const questions: QuestionSeed[] = [
         ]
     },
     {
-        questionText:   "How much health does this hero have?",
+        questionText:   "How much health does Mei have?",
         category:       "HERO_HEALTH",
         difficulty:     "EASY",
         subjectName:    "Mei",
