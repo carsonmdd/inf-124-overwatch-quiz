@@ -1,6 +1,5 @@
 // will make this a client component when interactivity is implemented
 // currently just a proof of concept
-import QuizGame from '@/components/QuizGame'
 
 const Quiz = () => {
     // temporary hardcoded values

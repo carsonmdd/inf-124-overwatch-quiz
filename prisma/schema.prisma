@@ -54,7 +54,7 @@ model Question {
   // relation fields define JOIN instructions in SQL and an optional field in
   // JSON objects when included in TS
   answers         Answer[]
-  attemptAnswers  AttemptAnswer[]
+  attemptAnswers  AttemptAnswer[] 
 
   @@index([difficulty])
   @@index([category, difficulty])
@@ -70,6 +70,8 @@ model Answer {
   displayOrder    Int
 
   question        Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  // think of relations like this: 
+  // when creating Questions, implicitly populate questionId (foreign key) field
   attemptAnswers  AttemptAnswer[]
 
   @@index([questionId, isCorrect])
