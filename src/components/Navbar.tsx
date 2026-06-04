@@ -30,7 +30,7 @@ const Navbar = () => {
 								<span className="text-ow-orange"> Quiz</span>
 							</Link>
 						</div>
-						<div className="hidden sm:block">
+						<div className="hidden md:block">
 							<div className="ml-10 flex items-center space-x-1 h-16">
 								{links.map((link) => {
 									const isActive = pathname === link.href;
@@ -51,7 +51,7 @@ const Navbar = () => {
 							</div>
 						</div>
 					</div>
-					<div className="flex items-center space-x-4 ">
+					<div className="hidden md:flex items-center space-x-4">
 						<Show when="signed-out">
 							<SignInButton mode="modal">
 								<button className="bg-ow-orange hover:bg-ow-orange/90 text-white px-4 py-2 rounded font-bold uppercase text-sm transition-colors">
@@ -67,7 +67,7 @@ const Navbar = () => {
 					{/* Menu button that shows up on smaller screens (responsive design) */}
 					{/* Uses a state to track the open/closed status of the menu, uses aria-expanded */}
 					{/* manually cleaned some unnecessary button tailwind css classes made by AI */}
-					<div className="sm:hidden">
+					<div className="md:hidden">
 						<button type="button" aria-expanded={menuOpen} onClick={() => setMenuOpen((open) => !open)}
 						className="bg-ow-orange inline-flex items-center justify-center rounded-md text-white-200 focus:outline-none focus:ring-2 focus:ring-ow-white px-2 py-2">
 							
@@ -79,9 +79,9 @@ const Navbar = () => {
 				</div>
 
 				{/* Mobile menu, uses menuOpen and a && conditional to show menu button with links */}
-				{/* depending on whether screen is small */}
+				{/* depending on whether screen is small or medium */}
 				{menuOpen && (
-					<div className="sm:hidden px-2 pt-2 pb-3 space-y-1 bg-ow-dark-blue/95">
+					<div className="md:hidden px-2 pt-2 pb-3 space-y-1 bg-ow-dark-blue/95">
 						{links.map((link) => {
 							const isActive = pathname === link.href;
 							return (
@@ -96,6 +96,18 @@ const Navbar = () => {
 								</Link>
 							);
 						})}
+						<div className="border-t border-ow-blue/40 pt-3">
+							<Show when="signed-out">
+								<SignInButton mode="modal">
+									<button className="w-full bg-ow-orange hover:bg-ow-orange/90 text-white px-4 py-2 rounded font-bold uppercase text-sm transition-colors">
+										Sign In
+									</button>
+								</SignInButton>
+							</Show>
+							<Show when="signed-in">
+								<UserButton />
+							</Show>
+						</div>
 					</div>
 				)}
 			</div>
