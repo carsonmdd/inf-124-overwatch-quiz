@@ -67,7 +67,7 @@ const QuizClient = ({ questions }: Props) => {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null); // 0-based index or null determines currently selected answer for this question
     const [hasAnswered, setHasAnswered] = useState(false); // lock in selected answer
     const [score, setScore] = useState(0); // total correct, from 0-10
-    const [streak, setStreak] = useState(0); // current consecutive  streak
+    const [streak, setStreak] = useState(0); // current consecutive streak
     const [maxStreak, setMaxStreak] = useState(0); // max total streak
 
     const question          = questions[currIndex];

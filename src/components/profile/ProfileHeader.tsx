@@ -5,10 +5,9 @@ interface ProfileHeaderProps {
 	avatarUrl: string;
 	joinDate: string;
 	globalRank: number;
-	isOwner: boolean;
 }
 
-const ProfileHeader = ({ username, avatarUrl, joinDate, globalRank, isOwner }: ProfileHeaderProps) => {
+const ProfileHeader = ({ username, avatarUrl, joinDate, globalRank }: ProfileHeaderProps) => {
 	const joined = new Date(joinDate).toLocaleDateString('en-US', {
 		month: 'long',
 		year: 'numeric',
@@ -31,11 +30,6 @@ const ProfileHeader = ({ username, avatarUrl, joinDate, globalRank, isOwner }: P
 					Joined {joined} · Global Rank #{globalRank}
 				</p>
 			</div>
-			{!isOwner && (
-				<button className="bg-ow-orange hover:bg-ow-orange/90 text-white px-4 py-2 rounded font-bold uppercase text-sm transition-colors">
-					Follow
-				</button>
-			)}
 		</header>
 	);
 };

@@ -1,6 +1,6 @@
 import { auth, currentUser } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
-import { prisma } from '@/lib/db';
+import { db } from '@/lib/db';
 import ProfileHeader from '@/components/profile/ProfileHeader';
 import ProfileStats from '@/components/profile/ProfileStats';
 import Achievements from '@/components/profile/Achievements';
@@ -10,29 +10,29 @@ export default async function ProfilePage() {
 	const { userId: clerkId } = await auth();
 	if (!clerkId) redirect('/sign-in');
 
-	const clerkUser = await currentUser();
-
-	const dbUser = await prisma.user.findUnique({
-		where: { clerkId },
-		include: {
-			quizAttempts: { orderBy: { completedAt: 'desc' } },
-			userAchievements: { include: { achievement: true } },
-		},
-	});
+	const [clerkUser, dbUser, allAchievements] = await Promise.all([
+		currentUser(),
+		db.user.findUnique({
+			where: { clerkId },
+			include: {
+				quizAttempts: { orderBy: { completedAt: 'desc' } },
+				userAchievements: { include: { achievement: true } },
+			},
+		}),
+		db.achievement.findMany(),
+	]);
 
 	const attempts = dbUser?.quizAttempts ?? [];
 	const lifetimePoints = attempts.reduce((s, a) => s + a.score, 0);
 	const bestScore =
 		attempts.length > 0 ? Math.max(...attempts.map((a) => a.score)) : 0;
 
-	const betterUsers = await prisma.quizAttempt.groupBy({
+	const betterUsers = await db.quizAttempt.groupBy({
 		by: ['userId'],
 		_sum: { score: true },
 		having: { score: { _sum: { gt: lifetimePoints } } },
 	});
 	const globalRank = betterUsers.length + 1;
-
-	const allAchievements = await prisma.achievement.findMany();
 	const earnedIds = new Set(
 		dbUser?.userAchievements.map((ua) => ua.achievementId) ?? [],
 	);
@@ -56,7 +56,6 @@ export default async function ProfilePage() {
 				avatarUrl={clerkUser?.imageUrl ?? ''}
 				joinDate={(dbUser?.createdAt ?? new Date()).toISOString()}
 				globalRank={globalRank}
-				isOwner={true}
 			/>
 			<ProfileStats
 				lifetimePoints={lifetimePoints}
