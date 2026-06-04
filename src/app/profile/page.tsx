@@ -56,7 +56,6 @@ export default async function ProfilePage() {
 				avatarUrl={clerkUser?.imageUrl ?? ''}
 				joinDate={(dbUser?.createdAt ?? new Date()).toISOString()}
 				globalRank={globalRank}
-				isOwner={true}
 			/>
 			<ProfileStats
 				lifetimePoints={lifetimePoints}

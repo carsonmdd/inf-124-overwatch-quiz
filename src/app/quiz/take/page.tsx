@@ -5,8 +5,6 @@ import { db } from '@/lib/db'; // use Prisma singleton
 import { buildQuiz } from '@/lib/utils';
 import QuizClient from './QuizClient';  
 
-type Phase = 'loading' | 'error' | 'quiz' | 'results';
-
 const Quiz = async () => {
     // fetch all questions. ok since we have like 10
     const [easyq, mediumq, hardq] = await Promise.all([
