@@ -1,0 +1,52 @@
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient();
+
+async function main(){
+
+    await prisma.achievement.createMany({
+
+        data:[
+            {
+                id: 1 
+                name: "First Quiz"
+                description: "Complete your first quiz."
+                badgeIcon: "/checkMark-svgrepo.svg"
+            },
+            {
+                id: 2 
+                name: "Getting the Hang of It"
+                description: "Get 90% or higher on a quiz"
+                badgeIcon: "/top500.png"
+            },
+            {
+                id: 3 
+                name: "Sharpshooter"
+                description: "Get five questions in a row correct"
+                badgeIcon: "/target-svgrepo-com.svg"
+            },
+            {
+                id: 4 
+                name: "Getting out of Bronze?"
+                description: "Complete ten quizzes"
+                badgeIcon: "/history-svgrepo-com.svg"
+            },
+            {
+                id: 5 
+                name: "The Fan Favorite Map"
+                description: "Answer a question about King's Row correctly."
+                badgeIcon: "/uk-flag-svgrepo.svg"
+            },
+        ],
+        skipDuplicates: true;
+    });
+    console.log('Achievements entered into db.);
+}
+main()
+   .catch((e) => {
+    console.error(e);
+    process.exit(1);
+   })
+   .finally(async() => {
+    await prisma.$disconnect();
+   });
