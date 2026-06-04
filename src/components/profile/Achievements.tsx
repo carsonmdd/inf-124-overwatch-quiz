@@ -1,7 +1,14 @@
-import Image from 'next/image';
 import Link from 'next/link';
+import * as Icons from 'lucide-react';
 import { Check, Lock, Trophy } from 'lucide-react';
 import type { Achievement } from '@/types/profile';
+
+type LucideComponent = React.ComponentType<{ className?: string }>;
+
+function getBadgeIcon(name: string): LucideComponent {
+	const icon = (Icons as Record<string, unknown>)[name];
+	return icon ? (icon as LucideComponent) : Icons.Star;
+}
 
 interface AchievementsProps {
 	achievements: Achievement[];
@@ -56,13 +63,14 @@ const Achievements = ({
 									: 'bg-gray-400/20'
 							}`}
 						>
-							<Image
-								width={40}
-								height={40}
-								src={a.badgeIcon}
-								alt=""
-								className={`rounded-full ${a.isAchieved ? '' : 'grayscale opacity-50'}`}
-							/>
+							{(() => {
+								const Icon = getBadgeIcon(a.badgeIcon);
+								return (
+									<Icon
+										className={`w-8 h-8 ${a.isAchieved ? 'text-ow-orange' : 'text-gray-400 opacity-50'}`}
+									/>
+								);
+							})()}
 						</div>
 
 						<div className="flex-1 min-w-0">
@@ -73,12 +81,12 @@ const Achievements = ({
 										: 'text-gray-600 dark:text-gray-300'
 								}`}
 							>
-								{a.achievementName}
+								{a.name}
 							</h3>
 							<p
 								className={`text-sm ${a.isAchieved ? 'text-gray-300' : 'text-gray-500 dark:text-gray-400'}`}
 							>
-								{a.achievementDescription}
+								{a.description}
 							</p>
 						</div>
 

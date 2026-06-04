@@ -1,7 +1,7 @@
-import type { ProfileUser } from '@/types/profile';
-
 interface ProfileStatsProps {
-	user: ProfileUser;
+	lifetimePoints: number;
+	numQuizzesPlayed: number;
+	bestScore: number;
 }
 
 const StatBlock = ({ label, value }: { label: string; value: string }) => (
@@ -15,28 +15,24 @@ const StatBlock = ({ label, value }: { label: string; value: string }) => (
 	</div>
 );
 
-const ProfileStats = ({ user }: ProfileStatsProps) => {
+const ProfileStats = ({ lifetimePoints, numQuizzesPlayed, bestScore }: ProfileStatsProps) => {
 	return (
 		<section className="w-full">
 			<h2 className="text-2xl font-black uppercase italic tracking-wider text-ow-dark-blue dark:text-white mb-4">
 				Stats
 			</h2>
-			<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+			<div className="grid grid-cols-3 gap-4">
 				<StatBlock
 					label="Lifetime Points"
-					value={user.lifetimePoints.toLocaleString()}
+					value={lifetimePoints.toLocaleString()}
 				/>
 				<StatBlock
 					label="Quizzes Played"
-					value={user.numQuizzesPlayed.toString()}
+					value={numQuizzesPlayed.toString()}
 				/>
 				<StatBlock
-					label="Quizzes Completed"
-					value={user.numQuizzesCompleted.toString()}
-				/>
-				<StatBlock
-					label="Longest Streak"
-					value={user.longestStreak.toString()}
+					label="Best Run"
+					value={`${bestScore} pts`}
 				/>
 			</div>
 		</section>

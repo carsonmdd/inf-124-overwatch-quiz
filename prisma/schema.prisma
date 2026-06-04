@@ -126,7 +126,7 @@ model Achievement {
   id                Int     @id @default(autoincrement())
   name              String  @unique
   description       String
-  badgeIcon         String
+  badgeIcon         String     // This is a Lucide React icon (e.g., "Trophy", "Star")
 
   userAchievements  UserAchievement[]
 }
