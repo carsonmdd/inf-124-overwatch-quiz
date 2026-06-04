@@ -3,10 +3,8 @@ import { auth, clerkClient } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
 import ProfileHeader from '@/components/profile/ProfileHeader';
 import ProfileStats from '@/components/profile/ProfileStats';
-import PersonalBests from '@/components/profile/PersonalBests';
-import CreatedQuizzes from '@/components/profile/CreatedQuizzes';
-import { CURRENT_USER_ID, getUserById } from '@/data/mockProfileData';
 import QuizHistory from '@/components/profile/QuizHistory';
+import Achievements from '@/components/profile/Achievements';
 
 export default async function UserProfilePage({
 	params,
@@ -79,8 +77,7 @@ export default async function UserProfilePage({
 				featured
 				viewAllHref={`/profile/${userId}/achievements`}
 			/>
-			<CreatedQuizzes quizzes={user.createdQuizzes} isOwner={isOwner} />
-			<QuizHistory history={user.quizHistory} />
+			<QuizHistory history={quizHistory} />
 		</div>
 	);
 }
