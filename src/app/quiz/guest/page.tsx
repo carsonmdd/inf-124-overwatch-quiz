@@ -8,14 +8,13 @@ import type { GuestQuestion } from '@/types/question';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 type Phase = 'loading' | 'error' | 'quiz' | 'results';
-
 const LETTERS = ['A', 'B', 'C', 'D'];
 
 export default function GuestQuiz() {
 	const { isSignedIn, isLoaded } = useAuth();
 	const router = useRouter();
 
-	const [phase, setPhase] = useState<Phase>('loading');
+	const [phase, setPhase] = useState<Phase>('loading'); //state to represent loading, error, quiz, and results phases all in one page
 	const [questions, setQuestions] = useState<GuestQuestion[]>([]);
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -25,7 +24,7 @@ export default function GuestQuiz() {
 
 	useEffect(() => {
 		if (isLoaded && isSignedIn) {
-			router.replace('/quiz/take');
+			router.replace('/quiz/take'); //if logged in user, web path is /quiz/take.
 		}
 	}, [isLoaded, isSignedIn, router]);
 
@@ -47,9 +46,8 @@ export default function GuestQuiz() {
 			}
 		})();
 
-		return () => {
-			cancelled = true;
-		};
+		return () => { cancelled = true; };
+
 	}, [isLoaded, isSignedIn, fetchKey]);
 
 	// Bump fetchKey to fetch new questions
@@ -73,7 +71,7 @@ export default function GuestQuiz() {
 
 	function handleNext() {
 		if (currentIndex < questions.length - 1) {
-			setCurrentIndex((i) => i + 1);
+			setCurrentIndex((i) => i + 1); //move to the next question
 			setSelectedIndex(null);
 			setHasAnswered(false);
 		} else {
@@ -215,6 +213,7 @@ export default function GuestQuiz() {
 					let letterClass =
 						'w-8 h-8 rounded-lg flex-shrink-0 flex items-center justify-center text-sm font-bold transition-colors duration-200 ';
 
+					{/* Appropriate styling based on answer state */}
 					if (!hasAnswered) {
 						btnClass +=
 							'border-ow-blue/50 bg-ow-blue/10 hover:bg-ow-light-blue/10 hover:border-ow-light-blue/45 cursor-pointer';

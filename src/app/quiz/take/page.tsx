@@ -1,7 +1,13 @@
 // will make this a client component when interactivity is implemented
 // currently just a proof of concept
-import QuizGame from '@/components/QuizGame'
+import Link from 'next/link';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
+//import { useState, useEffect } from 'react';
+type Phase = 'loading' | 'error' | 'quiz' | 'results';
+const LETTERS = ['A', 'B', 'C', 'D'];
+
+//this will become export default function UserQuiz() {...}
 const Quiz = () => {
     // temporary hardcoded values
     const currQuestion = 1;
@@ -16,6 +22,130 @@ const Quiz = () => {
         { letter: 'C', text: "Tumble" },
         { letter: 'D', text: "Get Out Of Dodge" },
     ];
+
+    //for client side interactivity, should be similar to guest quiz, but scores are saved for user
+    //and tracks logic for achievments (like consecutive correct answers, etc)
+    //const { isSignedIn, isLoaded } = useAuth();
+	//const router = useRouter();
+
+	//const [phase, setPhase] = useState<Phase>('loading'); //state to represent loading, error, quiz, and results phases all in one page
+	//const [questions, setQuestions] = useState<UserQuestion[]>([]); //want to use prisma for pulling questions, figure out the appropriate type
+	//const [currentIndex, setCurrentIndex] = useState(0);
+	//const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+	//const [hasAnswered, setHasAnswered] = useState(false);
+	//const [score, setScore] = useState(0);
+	//const [fetchKey, setFetchKey] = useState(0);
+
+    /* 
+    functions and use effect, should be somewhat similar to guest quiz
+
+    function handlePlayAgain() {
+		setPhase('loading');
+		setCurrentIndex(0);
+		setSelectedIndex(null);
+		setHasAnswered(false);
+		setScore(0);
+		setFetchKey((k) => k + 1);
+	}
+    
+    function handleSelectAnswer(index: number) {
+		if (hasAnswered) return;
+		setSelectedIndex(index);
+		setHasAnswered(true);
+		if (questions[currentIndex].answers[index].isCorrect) {
+			setScore((s) => s + 1);
+            //update a streak here.
+		}
+        else {//reset streak variable to 0}
+	}
+
+	function handleNext() {
+		if (currentIndex < questions.length - 1) {
+			setCurrentIndex((i) => i + 1);
+			setSelectedIndex(null);
+			setHasAnswered(false);
+		} else {
+			setPhase('results');
+		}
+	}
+
+    if (phase === 'loading') {
+		return (
+			<div className="flex-1 flex items-center justify-center bg-ow-dark-blue">
+				<p className="text-white/40 text-sm tracking-widest uppercase animate-pulse">
+					Loading questions...
+				</p>
+			</div>
+		);
+	}
+
+	if (phase === 'error') {
+		return (
+			<div className="flex-1 flex flex-col items-center justify-center bg-ow-dark-blue gap-4">
+				<p className="text-white/60 text-sm">
+					Could not load questions. Please try again.
+				</p>
+				<button
+					onClick={handlePlayAgain}
+					className="bg-ow-orange text-white px-6 py-2 rounded font-bold uppercase text-sm hover:bg-orange-600 transition-colors"
+				>
+					Try Again
+				</button>
+			</div>
+		);
+	}
+    
+
+    if (phase === 'results') {
+		const total = questions.length;
+		const pct = Math.round((score / total) * 100);
+		const message =
+			score === total
+				? 'PERFECT SCORE!'
+				: score >= 3
+					? 'NICE WORK!'
+					: 'KEEP PRACTICING!';
+		//update lifetime score of the user here
+        //update number of quizzes completed here
+
+        //if user's number of completed quizzes == 1, award achievement for first quiz completed
+        //if user's quiz percent score < 10% and has not achieved it, award achievment for poor perforamnce 10% or less
+        
+        return (
+			<div className="flex-1 flex flex-col items-center justify-center bg-ow-dark-blue p-6 gap-8">
+				<div className="text-center">
+					<p className="text-ow-orange text-[11px] font-medium tracking-[0.28em] uppercase mb-3">
+						Guest Quiz Complete
+					</p>
+					<h1 className="text-white font-black text-6xl uppercase tracking-tight mb-2">
+						{score} <span className="text-white/30">/ {total}</span>
+					</h1>
+					<p className="text-white/50 text-sm uppercase tracking-widest mt-1">
+						{pct}% correct — {message}
+					</p>
+				</div>
+
+				<div className="flex flex-col items-center gap-3 w-full max-w-sm">
+					
+					<button className="w-full border border-white/20 text-white/60 py-3 rounded font-bold uppercase text-sm tracking-widest hover:text-white hover:border-white/40 transition-colors"
+                    onClick={handlePlayAgain}>
+						Play Again
+					</button>
+					<Link
+						href="/"
+						className="text-white/30 text-xs tracking-wider hover:text-white/60 transition-colors uppercase mt-1 flex items-center justify-center gap-2"
+					>
+						<ArrowLeft size={16} />
+						Back to Home
+					</Link>
+				</div>
+			</div>
+		);
+	}
+    */
+
+    //const question = questions[currentIndex];
+	//const total = questions.length;
 
     return (
         <div className="flex-1 flex flex-col bg-ow-dark-blue p-6 gap-5">
@@ -36,7 +166,7 @@ const Quiz = () => {
                 />
             </div>
 
-            {/* QUESTION */}
+            {/* QUESTION (to do, have questions be pulled from database appropriately with our new schema prisma) */}
             <div className="flex-1 grid grid-cols-3 gap-6 items-stretch">
                 {/*Question text*/}
                 <div className="col-span-2 flex flex-col gap-3 justify-center">
@@ -96,7 +226,19 @@ const Quiz = () => {
                         </span>
                     </button>
                 ))}
-            </div> 
+            </div>
+
+            {/*
+			<button
+				onClick={handleNext}
+				disabled={!hasAnswered}
+				className={`flex items-center justify-center gap-2 bg-ow-orange text-white py-3 rounded font-black uppercase text-sm tracking-widest hover:bg-orange-600 transition-colors ${!hasAnswered && 'invisible'}`}
+			>
+				{currentIndex < total - 1 ? 'Next Question' : 'See Results'}
+				<ArrowRight size={16} />
+			</button>
+                Next button 
+            */}
         </div>
     );
 };
