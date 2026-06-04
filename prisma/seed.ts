@@ -5,6 +5,7 @@
 
 import { PrismaClient } from '@prisma/client'; // create prisma session
 import { questions } from '../src/data/questions';
+import { achievements } from '../src/data/achievements';
 // add other imports here for future data files
 
 const prisma = new PrismaClient();
