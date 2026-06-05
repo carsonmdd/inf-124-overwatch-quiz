@@ -77,6 +77,7 @@ const QuizClient = ({ questions, isGuest = false }: Props) => {
 	const [currIndex, setCurrIndex] = useState(0); // 0-based index to determine current question
 	const [selectedIndex, setSelectedIndex] = useState<number | null>(null); // 0-based index or null determines currently selected answer for this question
 	const [hasAnswered, setHasAnswered] = useState(false); // lock in selected answer
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [score, setScore] = useState(0); // streak-weighted point total
 	const [correctCount, setCorrectCount] = useState(0); // raw correct answers, 0-10
 	const [streak, setStreak] = useState(0); // current consecutive streak
@@ -114,6 +115,7 @@ const QuizClient = ({ questions, isGuest = false }: Props) => {
 			setHasAnswered(false);
 		} else {
 			if (!isGuest) {
+				setIsSubmitting(true);
 				await fetch('/api/quiz/attempt', {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
@@ -337,7 +339,7 @@ const QuizClient = ({ questions, isGuest = false }: Props) => {
 			{/*NEXT BUTTON */}
 			<button
 				onClick={handleNext}
-				disabled={!hasAnswered}
+				disabled={!hasAnswered || isSubmitting}
 				className={`
                     flex items-center justify-center gap-2
                     bg-ow-orange text-ow-dark-blue
