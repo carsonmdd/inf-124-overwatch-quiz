@@ -33,9 +33,6 @@ export default async function AchievementsPage({
 
 	return (
 		<div className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-8">
-			<h1 className="text-3xl font-black uppercase italic tracking-wider text-ow-dark-blue dark:text-white">
-				Achievements
-			</h1>
 			<Achievements achievements={achievements} />
 		</div>
 	);
