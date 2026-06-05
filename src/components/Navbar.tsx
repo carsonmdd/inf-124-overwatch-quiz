@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Show, SignInButton, UserButton, useAuth } from '@clerk/nextjs';
-import { Search } from 'lucide-react';
+import { Search, Menu, X } from 'lucide-react';
 
 type SearchUser = {
   id: string;
@@ -148,32 +148,38 @@ const Navbar = () => {
           </div>
 
           {/* Mobile menu button */}
-          <div className="lg:hidden">
+          <div className="lg:hidden flex items-center gap-3">
+            <Show when="signed-in">
+              <UserButton />
+            </Show>
             <button
               type="button"
               aria-expanded={menuOpen}
               onClick={() => setMenuOpen((open) => !open)}
-              className="bg-ow-orange inline-flex items-center justify-center rounded-md text-white focus:outline-none focus:ring-2 focus:ring-ow-white px-2 py-2"
+              className="inline-flex items-center justify-center rounded-md text-white/70 hover:text-white transition-colors p-1"
             >
               <span className="sr-only">Toggle navigation menu</span>
-              {menuOpen ? 'Close' : 'Menu'}
+              {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
+      </div>
 
-        {/* Mobile menu */}
-        {menuOpen && (
-          <div className="lg:hidden px-2 pt-2 pb-3 space-y-1 bg-ow-dark-blue/95">
+      {/* Mobile menu — fixed overlay so it doesn't push content down */}
+      {menuOpen && (
+        <div className="lg:hidden fixed top-16 left-0 right-0 z-50 bg-ow-dark-blue border-t border-white/[0.08] shadow-xl">
+          <div className="px-4 py-3 flex flex-col gap-1">
             {links.map((link) => {
               const isActive = pathname === link.href;
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`block rounded-md px-3 py-2 text-base font-bold uppercase tracking-wider transition ${
+                  onClick={() => setMenuOpen(false)}
+                  className={`px-3 py-2.5 rounded-md text-sm font-bold uppercase tracking-wider transition-colors ${
                     isActive
-                      ? 'border-l-4 border-ow-orange text-ow-orange bg-ow-blue/20'
-                      : 'border-transparent text-gray-300 hover:text-white hover:bg-ow-blue/10'
+                      ? 'text-ow-orange bg-ow-blue/20'
+                      : 'text-white/60 hover:text-white hover:bg-ow-blue/10'
                   }`}
                 >
                   {link.name}
@@ -183,25 +189,25 @@ const Navbar = () => {
 
             {/* Mobile search */}
             {userId && (
-              <div className="pt-2 pb-1 px-1">
-                <div className="flex items-center bg-ow-blue/20 border border-gray-600 rounded px-3 py-1.5 gap-2">
-                  <Search className="w-4 h-4 text-gray-400 shrink-0" />
+              <div className="pt-2 pb-1">
+                <div className="flex items-center bg-ow-blue/20 border border-white/10 rounded px-3 py-2 gap-2 focus-within:border-ow-orange transition-colors">
+                  <Search className="w-4 h-4 text-white/30 shrink-0" />
                   <input
                     type="text"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search users..."
-                    className="bg-transparent text-white text-sm w-full focus:outline-none placeholder-gray-500"
+                    className="bg-transparent text-white text-sm w-full focus:outline-none placeholder-white/30"
                   />
                 </div>
                 {showDropdown && results.length > 0 && (
-                  <ul className="mt-1 border border-gray-600 rounded bg-ow-dark-blue">
+                  <ul className="mt-1 border border-white/10 rounded bg-ow-dark-blue">
                     {results.map((user) => (
                       <li key={user.id}>
                         <Link
                           href={`/profile/${user.clerkId}`}
                           onClick={() => { setQuery(''); setShowDropdown(false); setMenuOpen(false); }}
-                          className="block px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-ow-blue/20 transition-colors"
+                          className="block px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-ow-blue/20 transition-colors"
                         >
                           {user.username}
                         </Link>
@@ -212,21 +218,18 @@ const Navbar = () => {
               </div>
             )}
 
-            <div className="border-t border-ow-blue/40 pt-3">
+            <div className="border-t border-white/[0.08] pt-3 mt-1">
               <Show when="signed-out">
                 <SignInButton mode="modal">
-                  <button className="w-full bg-ow-orange hover:bg-ow-orange/90 text-white px-4 py-2 rounded font-bold uppercase text-sm transition-colors">
+                  <button className="w-full bg-ow-orange hover:bg-ow-orange/90 text-white px-4 py-2.5 rounded font-bold uppercase text-sm tracking-wider transition-colors">
                     Sign In
                   </button>
                 </SignInButton>
               </Show>
-              <Show when="signed-in">
-                <UserButton />
-              </Show>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </nav>
   );
 };
