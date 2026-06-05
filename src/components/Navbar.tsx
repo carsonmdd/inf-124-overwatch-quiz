@@ -65,7 +65,7 @@ const Navbar = () => {
 	}, [query]);
 
 	return (
-		<nav className="bg-ow-dark-blue text-white shadow-lg w-full">
+		<nav className="sticky top-0 z-50 bg-ow-dark-blue text-white shadow-lg w-full relative">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				<div className="flex justify-between h-16 items-center">
 					<div className="flex items-center">
@@ -203,7 +203,7 @@ const Navbar = () => {
 
 			{/* Mobile menu — fixed overlay so it doesn't push content down */}
 			{menuOpen && (
-				<div className="lg:hidden fixed top-16 left-0 right-0 z-50 bg-ow-dark-blue border-t border-white/[0.08] shadow-xl">
+				<div className="lg:hidden absolute top-full left-0 right-0 bg-ow-dark-blue border-t border-white/[0.08] shadow-xl">
 					<div className="px-4 py-3 flex flex-col gap-1">
 						{links.map((link) => {
 							const isActive = pathname === link.href;
