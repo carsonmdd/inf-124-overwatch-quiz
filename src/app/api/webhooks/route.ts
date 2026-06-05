@@ -14,6 +14,20 @@ export async function POST(req: NextRequest) {
 			await db.user.create({
 				data: { clerkId: id, username: resolvedUsername },
 			});
+		} else if (evt.type === 'user.updated') {
+			const { id, username, email_addresses } = evt.data;
+			const resolvedUsername =
+				username ?? email_addresses[0]?.email_address ?? id;
+
+			await db.user.update({
+				where: { clerkId: id },
+				data: { username: resolvedUsername },
+			});
+		} else if (evt.type === 'user.deleted') {
+			const { id } = evt.data;
+			if (id) {
+				await db.user.delete({ where: { clerkId: id } });
+			}
 		}
 
 		return new Response('Webhook received', { status: 200 });
