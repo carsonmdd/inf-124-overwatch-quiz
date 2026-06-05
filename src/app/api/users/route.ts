@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     where: query
       ? { username: { contains: query, mode: 'insensitive' } }
       : undefined,
-    select: { id: true, username: true },
+    select: { id: true, username: true, clerkId: true },
     orderBy: { username: 'asc' },
   });
 
