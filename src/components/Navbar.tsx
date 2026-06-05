@@ -69,7 +69,7 @@ const Navbar = () => {
                 <span className="text-ow-orange"> Quiz</span>
               </Link>
             </div>
-            <div className="hidden md:block">
+            <div className="hidden lg:block">
               <div className="ml-10 flex items-center space-x-1 h-16">
                 {links.map((link) => {
                   const isActive = pathname === link.href;
@@ -92,7 +92,7 @@ const Navbar = () => {
           </div>
 
           {/* Right side: search + auth */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-4">
 
             {/* Search bar */}
             {userId && (
@@ -147,7 +147,7 @@ const Navbar = () => {
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <button
               type="button"
               aria-expanded={menuOpen}
@@ -162,7 +162,7 @@ const Navbar = () => {
 
         {/* Mobile menu */}
         {menuOpen && (
-          <div className="md:hidden px-2 pt-2 pb-3 space-y-1 bg-ow-dark-blue/95">
+          <div className="lg:hidden px-2 pt-2 pb-3 space-y-1 bg-ow-dark-blue/95">
             {links.map((link) => {
               const isActive = pathname === link.href;
               return (
