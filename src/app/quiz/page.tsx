@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { Brain, History, User } from 'lucide-react';
 import { auth } from '@clerk/nextjs/server';
@@ -14,6 +13,7 @@ const QuizHub = async () => {
 			>
 				{/*Quiz History — signed-in only*/}
 				{isSignedIn && (
+					<Link href={`/profile/${userId}`} className="contents">
 					<div className="group flex flex-col gap-5 border border-white/[0.08] rounded-xl p-7 cursor-pointer transition-transform duration-200 hover:-translate-y-1.5 hover:border-white/25">
 						{/*ICON*/}
 						<History className="w-10 h-10 text-ow-light-blue/70 group-hover:text-ow-light-blue transition-colors" />
@@ -33,6 +33,7 @@ const QuizHub = async () => {
 							<span className="text-sm">→</span>
 						</div>
 					</div>
+					</Link>
 				)}
 				{/*Take Quiz — signed-in only*/}
 				{isSignedIn && (
