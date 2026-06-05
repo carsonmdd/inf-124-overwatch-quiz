@@ -137,7 +137,7 @@ const Navbar = () => {
 
             <Show when="signed-out">
               <SignInButton mode="modal">
-                <button className="bg-ow-orange hover:bg-ow-orange/90 text-white px-4 py-2 rounded font-bold uppercase text-sm transition-colors">
+                <button className="bg-ow-orange hover:bg-ow-orange/90 text-gray-900 px-4 py-2 rounded font-bold uppercase text-sm transition-colors">
                   Sign In
                 </button>
               </SignInButton>
@@ -156,7 +156,7 @@ const Navbar = () => {
               type="button"
               aria-expanded={menuOpen}
               onClick={() => setMenuOpen((open) => !open)}
-              className="inline-flex items-center justify-center rounded-md text-white/70 hover:text-white transition-colors p-1"
+              className="bg-ow-orange inline-flex items-center justify-center rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-white px-2 py-2 font-bold"
             >
               <span className="sr-only">Toggle navigation menu</span>
               {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -221,7 +221,7 @@ const Navbar = () => {
             <div className="border-t border-white/[0.08] pt-3 mt-1">
               <Show when="signed-out">
                 <SignInButton mode="modal">
-                  <button className="w-full bg-ow-orange hover:bg-ow-orange/90 text-white px-4 py-2.5 rounded font-bold uppercase text-sm tracking-wider transition-colors">
+                  <button className="w-full bg-ow-orange hover:bg-ow-orange/90 text-gray-900 px-4 py-2 rounded font-bold uppercase text-sm transition-colors">
                     Sign In
                   </button>
                 </SignInButton>
