@@ -14,5 +14,29 @@ interface AchievementSeed {
 }
 
 export const achievements: AchievementSeed[] = [
-    // TODO: translate data from seed.prisma to AchievementSeed objects
+    {
+      name: "First Quiz",
+      description: "Complete your first quiz.",
+      badgeIcon: "/checkMark-svgrepo.svg",
+  },
+  {
+      name: "Getting the Hang of It",
+      description: "Get 90% or higher on a quiz",
+      badgeIcon: "/top500.png",
+  },
+  {
+      name: "Sharpshooter",
+      description: "Get five questions in a row correct",
+      badgeIcon: "/target-svgrepo-com.svg",
+  },
+  {
+      name: "Getting out of Bronze?",
+      description: "Complete ten quizzes",
+      badgeIcon: "/history-svgrepo-com.svg",
+  },
+  {
+      name: "The Fan Favorite Map",
+      description: "Answer a question about King's Row correctly.",
+      badgeIcon: "/uk-flag-svgrepo.svg",
+  },
 ];

@@ -3,19 +3,18 @@
 
 // run w/ npx prisma db seed
 
-import { PrismaClient } from '@prisma/client'; // create prisma session
+import { PrismaClient } from '@prisma/client';
 import { questions } from '../src/data/questions';
 import { achievements } from '../src/data/achievements';
-// add other imports here for future data files
 
 const prisma = new PrismaClient();
 
 async function main() {
-    // right now, just validates Question and Answer
+    // ─── Questions ───────────────────────────────────────────────────────────
     let inserted = 0;
     let skipped = 0;
     let failed = 0;
-    // ensure question doesn't already exist in DB
+
     for (const q of questions) {
         const exists = await prisma.question.findFirst({
             where: { questionText: q.questionText },
@@ -25,30 +24,25 @@ async function main() {
             continue;
         }
 
-        // ensure Answer fits proper params
         if (q.answers.length !== 4) {
-            // consider adding additional validation checks here
             ++failed;
-            // consider logging WHICH question failed
             continue;
         }
 
-        // insert
         await prisma.question.create({
             data: {
-                questionText:       q.questionText,
-                questionContext:    q.questionContext   ?? null,
-                category:           q.category,
-                difficulty:         q.difficulty,
-                subjectName:        q.subjectName       ?? null,
-                overfastKey:        q.overfastKey       ?? null,
-                imageUrl:           q.imageUrl          ?? null,
-
+                questionText:    q.questionText,
+                questionContext: q.questionContext ?? null,
+                category:        q.category,
+                difficulty:      q.difficulty,
+                subjectName:     q.subjectName    ?? null,
+                overfastKey:     q.overfastKey    ?? null,
+                imageUrl:        q.imageUrl       ?? null,
                 answers: {
                     create: q.answers.map((answer, index) => ({
-                        answerText:      answer.answerText,
-                        isCorrect:      answer.isCorrect,
-                        displayOrder:   index + 1,
+                        answerText:   answer.answerText,
+                        isCorrect:    answer.isCorrect,
+                        displayOrder: index + 1,
                     })),
                 },
             },
@@ -56,18 +50,48 @@ async function main() {
         ++inserted;
     }
     logDBInsertion(questions.length, inserted, skipped, failed);
+
+    // ─── Achievements ────────────────────────────────────────────────────────
+    let achievementsInserted = 0;
+    let achievementsSkipped = 0;
+
+    for (const a of achievements) {
+        const exists = await prisma.achievement.findFirst({
+            where: { name: a.name },
+        });
+        if (exists) {
+            ++achievementsSkipped;
+            continue;
+        }
+
+        await prisma.achievement.create({
+            data: {
+                name:        a.name,
+                description: a.description,
+                badgeIcon:   a.badgeIcon,
+            },
+        });
+        ++achievementsInserted;
+    }
+    logAchievementInsertion(achievements.length, achievementsInserted, achievementsSkipped);
 }
 
-function logDBInsertion(questions: number, inserted: number, skipped: number, failed: number): void {
-    console.log(`Found ${questions} questions in data file.\n`);
+function logDBInsertion(total: number, inserted: number, skipped: number, failed: number): void {
+    console.log(`Found ${total} questions in data file.\n`);
     console.log(`Inserted: ${inserted}`);
     console.log(`Skipped: ${skipped}`);
     console.log(`Failed: ${failed}`);
 }
 
+function logAchievementInsertion(total: number, inserted: number, skipped: number): void {
+    console.log(`\nFound ${total} achievements in data file.\n`);
+    console.log(`Inserted: ${inserted}`);
+    console.log(`Skipped: ${skipped}`);
+}
+
 main().catch((error) => {
     console.error('Seeding DB failed:', error);
     process.exit(1);
-}).finally(async() => {
+}).finally(async () => {
     await prisma.$disconnect();
-})
+});

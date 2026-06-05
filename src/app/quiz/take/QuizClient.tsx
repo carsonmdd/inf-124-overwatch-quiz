@@ -74,6 +74,7 @@ const QuizClient = ({ questions, isGuest = false }: Props) => {
 	const [score, setScore] = useState(0); // total correct, from 0-10
 	const [streak, setStreak] = useState(0); // current consecutive streak
 	const [maxStreak, setMaxStreak] = useState(0); // max total streak
+	const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]); //save record of answers given
 
 	const question = questions[currIndex];
 	const total = questions.length; // tentatively will always be 10
@@ -84,6 +85,7 @@ const QuizClient = ({ questions, isGuest = false }: Props) => {
 		if (hasAnswered) return;
 		setSelectedIndex(index);
 		setHasAnswered(true);
+		setSelectedAnswers(prev => [...prev, index]);
 
 		const isCorrect = question.answers[index].isCorrect;
 
@@ -109,7 +111,15 @@ const QuizClient = ({ questions, isGuest = false }: Props) => {
 				await fetch('/api/quiz/attempt', {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ score }),
+					body: JSON.stringify({
+						score,
+						//send additional info about the question to DB, useful for achievements
+						answers: questions.map((q, i) => ({
+							questionId: q.id,
+							answerId: q.answers[selectedAnswers[i]].id,
+							isCorrect: q.answers[selectedAnswers[i]].isCorrect,
+						}))
+						}),
 				});
 			}
 			setPhase('results');
@@ -124,6 +134,7 @@ const QuizClient = ({ questions, isGuest = false }: Props) => {
 		setStreak(0);
 		setMaxStreak(0);
 		setPhase('quiz');
+		setSelectedAnswers([]);
 		router.refresh();
 	};
 
