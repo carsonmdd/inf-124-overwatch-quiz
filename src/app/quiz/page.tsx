@@ -40,7 +40,7 @@ const QuizHub = async () => {
 					<Link href="/quiz/take" className="contents">
 						<div className="group relative flex flex-col gap-5 bg-ow-orange/5 border-2 border-ow-orange/50 rounded-xl p-7 cursor-pointer transition-transform duration-200 hover:-translate-y-1.5 hover:border-ow-orange">
 							<div className="absolute -top-px left-1/2 -translate-x-1/2">
-								<span className="bg-ow-orange text-ow-white text-[9px] font-bold tracking-[0.15em] uppercase px-3 py-0.5 rounded-b-md block">
+								<span className="bg-ow-orange text-gray-900 text-[10px] font-bold tracking-[0.15em] uppercase px-3 py-0.5 rounded-b-md block">
 									Featured
 								</span>
 							</div>
