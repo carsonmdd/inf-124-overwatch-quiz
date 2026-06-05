@@ -83,7 +83,6 @@ const Leaderboard = () => {
             return (
               <li
                 key={player.id}
-                tabIndex={0}
                 aria-label={`Rank ${player.rank}, ${player.username}, Score ${player.totalScore.toLocaleString()} points`}
                 className={`relative z-0 hover:z-10 focus:z-10 focus:outline-none focus:ring-2 focus:ring-ow-orange focus:scale-[1.02] focus:shadow-lg flex items-center gap-2 sm:gap-4 p-3 sm:p-4 rounded-sm border-l-4 transition-all duration-200 hover:scale-[1.02] hover:shadow-lg ${specialStyling}`}
               >
@@ -120,7 +119,7 @@ const Leaderboard = () => {
           onClick={handlePrev}
           disabled={currentPage === 1}
           aria-label="Go to previous page"
-          className="flex items-center gap-1 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 bg-ow-dark-blue text-white hover:bg-ow-orange focus:outline-none focus:ring-2 focus:ring-ow-orange disabled:opacity-20 disabled:hover:bg-ow-dark-blue rounded-sm uppercase italic font-bold tracking-wider transition-colors text-sm sm:text-base"
+          className="flex items-center gap-1 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 bg-ow-dark-blue text-white hover:bg-ow-orange focus:outline-none focus:ring-2 focus:ring-ow-orange disabled:opacity-40 disabled:hover:bg-ow-dark-blue rounded-sm uppercase italic font-bold tracking-wider transition-colors text-sm sm:text-base"
         >
           <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" /> Prev
         </button>
@@ -133,7 +132,7 @@ const Leaderboard = () => {
           onClick={handleNext}
           disabled={currentPage === totalPages}
           aria-label="Go to next page"
-          className="flex items-center gap-1 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 bg-ow-dark-blue text-white hover:bg-ow-orange focus:outline-none focus:ring-2 focus:ring-ow-orange disabled:opacity-20 disabled:hover:bg-ow-dark-blue rounded-sm uppercase italic font-bold tracking-wider transition-colors text-sm sm:text-base"
+          className="flex items-center gap-1 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 bg-ow-dark-blue text-white hover:bg-ow-orange focus:outline-none focus:ring-2 focus:ring-ow-orange disabled:opacity-40 disabled:hover:bg-ow-dark-blue rounded-sm uppercase italic font-bold tracking-wider transition-colors text-sm sm:text-base"
         >
           Next <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" />
         </button>
