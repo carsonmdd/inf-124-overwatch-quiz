@@ -91,7 +91,6 @@ const Achievements = ({
 						</div>
 
 						<span
-							aria-label={a.isAchieved ? 'Earned' : 'Locked'}
 							className={`shrink-0 w-7 h-7 rounded-full flex items-center justify-center ${
 								a.isAchieved
 									? 'bg-green-500 text-white'

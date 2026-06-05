@@ -15,7 +15,7 @@ export default function Home() {
 				<div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center">
 					<Link
 						href="/quiz"
-						className="px-8 sm:px-12 py-3 sm:py-4 bg-ow-orange text-white text-base sm:text-xl font-black uppercase italic tracking-widest rounded-sm hover:bg-orange-600 transition-all transform hover:scale-105 shadow-xl"
+						className="px-8 sm:px-12 py-3 sm:py-4 bg-ow-orange text-ow-dark-blue text-base sm:text-xl font-black uppercase italic tracking-widest rounded-sm hover:bg-orange-600 transition-all transform hover:scale-105 shadow-xl"
 					>
 						Start Quiz
 					</Link>
