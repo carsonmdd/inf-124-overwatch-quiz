@@ -94,8 +94,7 @@ const QuizClient = ({ questions, isGuest = false }: Props) => {
 		setHasAnswered(true);
 		setSelectedAnswers((prev) => [...prev, index]);
 
-		// const isCorrect = question.answers[index].isCorrect;
-		const isCorrect = true;
+		const isCorrect = question.answers[index].isCorrect;
 
 		if (isCorrect) {
 			const newStreak = streak + 1;
