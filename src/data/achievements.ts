@@ -5,8 +5,6 @@
 // run ' npx prisma db seed ',
 // & the script will auto insert all new questions while skipping old ones
 
-import type Achievement from "@prisma/client";
-
 interface AchievementSeed {
   name:        string;
   description: string;
