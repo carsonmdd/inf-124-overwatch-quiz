@@ -36,8 +36,8 @@ const Navbar = () => {
         setShowDropdown(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mouseup', handleClickOutside);
+	return () => document.removeEventListener('mouseup', handleClickOutside);
   }, []);
 
   // Search as you type
@@ -120,7 +120,8 @@ const Navbar = () => {
                           <li key={user.id}>
                             <Link
                               href={`/profile/${user.clerkId}`}
-                              onClick={() => { setQuery(''); setShowDropdown(false); }}
+                              onClick={() => { setQuery(''); setShowDropdown(false); setMenuOpen(false); }}
+							  onTouchEnd={() => { setQuery(''); setShowDropdown(false); setMenuOpen(false); }}
                               className="block px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-ow-blue/20 transition-colors"
                             >
                               {user.username}
