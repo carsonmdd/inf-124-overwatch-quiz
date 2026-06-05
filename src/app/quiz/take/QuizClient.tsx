@@ -48,10 +48,23 @@ const LETTERS = ['A', 'B', 'C', 'D'] as const;
 // HELPERS
 // consider moving some to /lib/utils
 
+const DIFFICULTY_POINTS: Record<string, number> = {
+	EASY: 1,
+	MEDIUM: 2,
+	HARD: 3,
+};
+
+const DIFFICULTY_STYLES: Record<string, string> = {
+	EASY: 'text-green-400 border border-green-400/40 bg-green-400/10',
+	MEDIUM: 'text-amber-400 border border-amber-400/40 bg-amber-400/10',
+	HARD: 'text-red-400 border border-red-400/40 bg-red-400/10',
+};
+
+// streak adds a flat bonus on top of difficulty base points
 const getStreakBonus = (currentStreak: number): number => {
-	if (currentStreak >= 5) return 3;
-	if (currentStreak >= 3) return 2;
-	return 1;
+	if (currentStreak >= 5) return 2;
+	if (currentStreak >= 3) return 1;
+	return 0;
 };
 
 // Lowercase all caps Category from Prisma schema
@@ -101,7 +114,8 @@ const QuizClient = ({ questions, isGuest = false }: Props) => {
 			const newStreak = streak + 1;
 			setStreak(newStreak);
 			setMaxStreak((ms) => Math.max(ms, newStreak));
-			setScore((s) => s + getStreakBonus(newStreak));
+			const pts = (DIFFICULTY_POINTS[question.difficulty] ?? 1) + getStreakBonus(newStreak);
+			setScore((s) => s + pts);
 			setCorrectCount((c) => c + 1);
 		} else {
 			setStreak(0);
@@ -255,10 +269,15 @@ const QuizClient = ({ questions, isGuest = false }: Props) => {
 			<div className="flex-1 grid grid-cols-3 gap-6 items-stretch">
 				{/* QUESTION*/}
 				<div className="col-span-2 flex flex-col gap-3 justify-center">
-					{/*CATEGORY*/}
-					<p className="text-ow-orange text-[10px] font-medium tracking-[0.28em] uppercase">
-						{lowercaseCategory(question.category)}
-					</p>
+					{/*CATEGORY + DIFFICULTY*/}
+					<div className="flex items-center gap-2">
+						<p className="text-ow-orange text-[10px] font-medium tracking-[0.28em] uppercase">
+							{lowercaseCategory(question.category)}
+						</p>
+						<span className={`text-[9px] font-bold tracking-[0.2em] uppercase px-1.5 py-0.5 rounded ${DIFFICULTY_STYLES[question.difficulty] ?? DIFFICULTY_STYLES.EASY}`}>
+							{question.difficulty}
+						</span>
+					</div>
 					{/*QUESTION TEXT*/}
 					{/*questionText is part of every question */}
 					{/*questionContext is only for complex quesitons */}
@@ -273,17 +292,25 @@ const QuizClient = ({ questions, isGuest = false }: Props) => {
 
 					{/*ANSWER FEEDBACK*/}
 					{hasAnswered && selectedIndex !== null && (
-						<p
-							className={`text-sm font-semibold tracking-wide uppercase ${
-								question.answers[selectedIndex].isCorrect
-									? 'text-green-400'
-									: 'text-red-400'
-							}`}
-						>
-							{question.answers[selectedIndex].isCorrect
-								? `+${getStreakBonus(streak)} pt${getStreakBonus(streak) > 1 ? 's' : ''}${streak > 1 ? ` · ${streak} in a row!` : ''}`
-								: `Wrong. ${question.answers.find((a) => a.isCorrect)?.answerText}`}
-						</p>
+						question.answers[selectedIndex].isCorrect ? (
+							<div className="flex items-center gap-2 flex-wrap">
+								<span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded ${DIFFICULTY_STYLES[question.difficulty] ?? DIFFICULTY_STYLES.EASY}`}>
+									{question.difficulty} +{DIFFICULTY_POINTS[question.difficulty] ?? 1}
+								</span>
+								{getStreakBonus(streak) > 0 && (
+									<span className="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded text-ow-orange border border-ow-orange/40 bg-ow-orange/10">
+										Streak +{getStreakBonus(streak)}
+									</span>
+								)}
+								<span className="text-sm font-black text-green-400 uppercase tracking-wide">
+									= +{(DIFFICULTY_POINTS[question.difficulty] ?? 1) + getStreakBonus(streak)} pts{streak > 1 ? ` · ${streak} in a row!` : ''}
+								</span>
+							</div>
+						) : (
+							<p className="text-sm font-semibold tracking-wide uppercase text-red-400">
+								Wrong. {question.answers.find((a) => a.isCorrect)?.answerText}
+							</p>
+						)
 					)}
 				</div>
 				{/*Hero/map image*/}
