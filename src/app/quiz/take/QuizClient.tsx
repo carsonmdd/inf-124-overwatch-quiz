@@ -7,7 +7,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Flame } from 'lucide-react';
 import { SignInButton } from '@clerk/nextjs';
 import type { Prisma } from '@prisma/client';
 
@@ -48,6 +48,12 @@ const LETTERS = ['A', 'B', 'C', 'D'] as const;
 // HELPERS
 // consider moving some to /lib/utils
 
+const getStreakBonus = (currentStreak: number): number => {
+	if (currentStreak >= 5) return 3;
+	if (currentStreak >= 3) return 2;
+	return 1;
+};
+
 // Lowercase all caps Category from Prisma schema
 const lowercaseCategory = (category: string): string =>
 	category
@@ -71,7 +77,8 @@ const QuizClient = ({ questions, isGuest = false }: Props) => {
 	const [currIndex, setCurrIndex] = useState(0); // 0-based index to determine current question
 	const [selectedIndex, setSelectedIndex] = useState<number | null>(null); // 0-based index or null determines currently selected answer for this question
 	const [hasAnswered, setHasAnswered] = useState(false); // lock in selected answer
-	const [score, setScore] = useState(0); // total correct, from 0-10
+	const [score, setScore] = useState(0); // streak-weighted point total
+	const [correctCount, setCorrectCount] = useState(0); // raw correct answers, 0-10
 	const [streak, setStreak] = useState(0); // current consecutive streak
 	const [maxStreak, setMaxStreak] = useState(0); // max total streak
 	const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]); //save record of answers given
@@ -85,17 +92,17 @@ const QuizClient = ({ questions, isGuest = false }: Props) => {
 		if (hasAnswered) return;
 		setSelectedIndex(index);
 		setHasAnswered(true);
-		setSelectedAnswers(prev => [...prev, index]);
+		setSelectedAnswers((prev) => [...prev, index]);
 
-		const isCorrect = question.answers[index].isCorrect;
+		// const isCorrect = question.answers[index].isCorrect;
+		const isCorrect = true;
 
 		if (isCorrect) {
-			// increment score & streak, & set max streak
-			setScore((s) => s + 1);
 			const newStreak = streak + 1;
 			setStreak(newStreak);
-
 			setMaxStreak((ms) => Math.max(ms, newStreak));
+			setScore((s) => s + getStreakBonus(newStreak));
+			setCorrectCount((c) => c + 1);
 		} else {
 			setStreak(0);
 		}
@@ -118,8 +125,8 @@ const QuizClient = ({ questions, isGuest = false }: Props) => {
 							questionId: q.id,
 							answerId: q.answers[selectedAnswers[i]].id,
 							isCorrect: q.answers[selectedAnswers[i]].isCorrect,
-						}))
-						}),
+						})),
+					}),
 				});
 			}
 			setPhase('results');
@@ -131,6 +138,7 @@ const QuizClient = ({ questions, isGuest = false }: Props) => {
 		setSelectedIndex(null);
 		setHasAnswered(false);
 		setScore(0);
+		setCorrectCount(0);
 		setStreak(0);
 		setMaxStreak(0);
 		setPhase('quiz');
@@ -164,8 +172,7 @@ const QuizClient = ({ questions, isGuest = false }: Props) => {
 
 	// RESULTS PHASE
 	if (phase === 'results') {
-		const pct = Math.round((score / total) * 100);
-		const message = getResultMessage(score, total);
+		const message = getResultMessage(correctCount, total);
 
 		return (
 			<div className="flex-1 flex flex-col items-center justify-center bg-ow-dark-blue p-6 gap-8">
@@ -173,13 +180,12 @@ const QuizClient = ({ questions, isGuest = false }: Props) => {
 					<p className="text-ow-orange text-[11px] font-medium tracking-[0.28em] uppercase mb-3">
 						{isGuest ? 'Guest Quiz Complete' : 'Quiz Complete'}
 					</p>
-					{/*score currently calced as correct / total */}
 					<h1 className="text-white font-black text-6xl uppercase tracking-tight mb-2">
-						{score} <span className="text-white/30">/ {total}</span>
+						{score} <span className="text-white/30">pts</span>
 					</h1>
 
 					<p className="text-white/50 text-sm uppercase tracking-wisdest mt-1">
-						{pct}% correct: {message}
+						{correctCount}/{total} correct · {message}
 					</p>
 
 					{/*acknowledge streaks 3 or more*/}
@@ -228,8 +234,11 @@ const QuizClient = ({ questions, isGuest = false }: Props) => {
 				<span className="text-white/40 text-[11px] font-medium tracking-[0.22em] uppercase">
 					Question {currIndex + 1} / {total}
 				</span>
-				<span className="text-ow-orange text-[11px] font-semibold tracking-[0.22em] uppercase">
-					Score: {score}
+				<span className="flex items-center gap-1.5 text-ow-orange text-[11px] font-semibold tracking-[0.22em] uppercase">
+					{streak >= 3 && (
+						<Flame size={13} className="text-ow-orange" />
+					)}
+					{score} pts
 				</span>
 			</div>
 
@@ -271,9 +280,7 @@ const QuizClient = ({ questions, isGuest = false }: Props) => {
 							}`}
 						>
 							{question.answers[selectedIndex].isCorrect
-								? streak > 1
-									? `Correct! ${streak} in a row!`
-									: 'Correct!'
+								? `+${getStreakBonus(streak)} pt${getStreakBonus(streak) > 1 ? 's' : ''}${streak > 1 ? ` · ${streak} in a row!` : ''}`
 								: `Wrong. ${question.answers.find((a) => a.isCorrect)?.answerText}`}
 						</p>
 					)}
