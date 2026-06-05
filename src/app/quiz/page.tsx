@@ -1,6 +1,6 @@
-import Image from 'next/image'
+import Image from 'next/image';
 import Link from 'next/link';
-import { User } from 'lucide-react';
+import { Brain, History, User } from 'lucide-react';
 import { auth } from '@clerk/nextjs/server';
 
 const QuizHub = async () => {
@@ -9,21 +9,22 @@ const QuizHub = async () => {
 
 	return (
 		<div className="flex min-h-screen w-full items-center justify-center p-6">
-			<div className={`grid grid-cols-1 gap-5 w-full max-w-3xl mx-auto p-6 ${isSignedIn ? 'md:grid-cols-2' : ''}`}>
+			<div
+				className={`grid grid-cols-1 gap-5 w-full max-w-3xl mx-auto p-6 ${isSignedIn ? 'md:grid-cols-2' : ''}`}
+			>
 				{/*Quiz History — signed-in only*/}
 				{isSignedIn && (
 					<div className="group flex flex-col gap-5 border border-white/[0.08] rounded-xl p-7 cursor-pointer transition-transform duration-200 hover:-translate-y-1.5 hover:border-white/25">
-						<div className="w-11 h-11 rounded-lg bg-white/5 flex items-center justify-center transition-colors group-hover:bg-white/10">
-							{/*ICON*/}
-							<Image src = '/historyIcon.png' alt = 'Quiz History Icon' width = {44} height = {44} />
-						</div>
+						{/*ICON*/}
+						<History className="w-10 h-10 text-ow-light-blue/70 group-hover:text-ow-light-blue transition-colors" />
 
 						<div className="flex-1">
 							<h2 className="text-white text-2xl font-bold uppercase tracking-wide leading-tight mb-2.5">
 								Quiz History
 							</h2>
 							<p className="text-white/35 text-[13px] leading-relaxed transition-colors duration-200 hover:text-white/70">
-								Revisit scores, review past attempts, and track your improvement.
+								Revisit scores, review past attempts, and track
+								your improvement.
 							</p>
 						</div>
 
@@ -43,17 +44,15 @@ const QuizHub = async () => {
 								</span>
 							</div>
 
-							<div className="w-11 h-11 rounded-lg bg-ow-orange/15 flex items-center justify-center mt-2 transition-colors group-hover:bg-amber-400/25">
-								{/*ICON*/}
-								<Image src = '/brain-clipart-transparent.png' alt = 'Take Quiz Icon' width = {44} height = {44} />
-							</div>
+							<Brain className="w-10 h-10 text-ow-orange/70 group-hover:text-ow-orange transition-colors" />
 
 							<div className="flex-1">
 								<h2 className="text-white text-2xl font-bold uppercase tracking-wide leading-tight mb-2.5">
 									Take Quiz
 								</h2>
 								<p className="text-white/35 text-[13px] leading-relaxed transition-colors duration-200 hover:text-white/70">
-									Test your knowledge of Overwatch's heroes, lore, abilities, and metas.
+									Test your knowledge of Overwatch's heroes,
+									lore, abilities, and metas.
 								</p>
 							</div>
 
@@ -77,7 +76,8 @@ const QuizHub = async () => {
 									Play as Guest
 								</h2>
 								<p className="text-white/35 text-[13px] leading-relaxed transition-colors duration-200 hover:text-white/70">
-									Try 5 dynamic questions without an account. No score saved.
+									Try 5 dynamic questions without an account.
+									No score saved.
 								</p>
 							</div>
 
