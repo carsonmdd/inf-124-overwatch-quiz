@@ -15,6 +15,7 @@ const Navbar = () => {
 		{ name: 'Leaderboard', href: '/leaderboard' },
 		{ name: 'About', href: '/about' },
 		...(userId ? [{ name: 'Profile', href: `/profile/${userId}` }] : []),
+		...(userId ? [{ name: 'Search User', href: "/search" }] : []),
 	];
 
 	return (
