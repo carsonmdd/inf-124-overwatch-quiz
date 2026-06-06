@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import { Brain, History, User } from 'lucide-react';
 import { auth } from '@clerk/nextjs/server';
+import QuizCard from '@/components/QuizCard';
 
 const QuizHub = async () => {
 	const { userId } = await auth();
@@ -11,83 +11,34 @@ const QuizHub = async () => {
 			<div
 				className={`grid grid-cols-1 gap-5 w-full max-w-3xl mx-auto p-6 ${isSignedIn ? 'md:grid-cols-2' : ''}`}
 			>
-				{/*Quiz History — signed-in only*/}
 				{isSignedIn && (
-					<Link href={`/profile/${userId}`} className="contents">
-					<div className="group flex flex-col gap-5 border border-white/[0.08] rounded-xl p-7 cursor-pointer transition-transform duration-200 hover:-translate-y-1.5 hover:border-white/25">
-						{/*ICON*/}
-						<History className="w-10 h-10 text-ow-light-blue/70 group-hover:text-ow-light-blue transition-colors" />
-
-						<div className="flex-1">
-							<h2 className="text-white text-2xl font-bold uppercase tracking-wide leading-tight mb-2.5">
-								Quiz History
-							</h2>
-							<p className="text-white/35 text-[13px] leading-relaxed transition-colors duration-200 hover:text-white/70">
-								Revisit scores, review past attempts, and track
-								your improvement.
-							</p>
-						</div>
-
-						<div className="flex items-center gap-1 text-white/40 text-[11px] font-medium tracking-widest uppercase opacity-50 group-hover:opacity-100 transition-opacity">
-							<span>Open</span>
-							<span className="text-sm">→</span>
-						</div>
-					</div>
-					</Link>
+					<QuizCard
+						href={`/profile/${userId}`}
+						icon={History}
+						title="Quiz History"
+						description="Revisit scores, review past attempts, and track your improvement."
+						ctaText="Open"
+					/>
 				)}
-				{/*Take Quiz — signed-in only*/}
 				{isSignedIn && (
-					<Link href="/quiz/take" className="contents">
-						<div className="group relative flex flex-col gap-5 bg-ow-orange/5 border-2 border-ow-orange/50 rounded-xl p-7 cursor-pointer transition-transform duration-200 hover:-translate-y-1.5 hover:border-ow-orange">
-							<div className="absolute -top-px left-1/2 -translate-x-1/2">
-								<span className="bg-ow-orange text-gray-900 text-[10px] font-bold tracking-[0.15em] uppercase px-3 py-0.5 rounded-b-md block">
-									Featured
-								</span>
-							</div>
-
-							<Brain className="w-10 h-10 text-ow-orange/70 group-hover:text-ow-orange transition-colors" />
-
-							<div className="flex-1">
-								<h2 className="text-white text-2xl font-bold uppercase tracking-wide leading-tight mb-2.5">
-									Take Quiz
-								</h2>
-								<p className="text-white/35 text-[13px] leading-relaxed transition-colors duration-200 hover:text-white/70">
-									Test your knowledge of Overwatch's heroes,
-									lore, abilities, and metas.
-								</p>
-							</div>
-
-							<div className="flex items-center gap-1 text-ow-orange text-[11px] font-medium tracking-widest uppercase">
-								<span>Start Quiz</span>
-								<span className="text-sm">→</span>
-							</div>
-						</div>
-					</Link>
+					<QuizCard
+						href="/quiz/take"
+						icon={Brain}
+						title="Take Quiz"
+						description="Test your knowledge of Overwatch's heroes, lore, abilities, and metas."
+						ctaText="Start Quiz"
+						featured
+					/>
 				)}
-				{/*Play as Guest — hidden for signed-in users*/}
 				{!isSignedIn && (
-					<Link href="/quiz/guest" className="contents">
-						<div className="group flex flex-col gap-5 border border-white/[0.08] rounded-xl p-7 cursor-pointer transition-transform duration-200 hover:-translate-y-1.5 hover:border-white/25">
-							<div className="w-11 h-11 rounded-lg bg-white/5 flex items-center justify-center transition-colors group-hover:bg-white/10">
-								<User className="w-5 h-5 text-white/40 group-hover:text-white/70 transition-colors" />
-							</div>
-
-							<div className="flex-1">
-								<h2 className="text-white text-2xl font-bold uppercase tracking-wide leading-tight mb-2.5">
-									Play as Guest
-								</h2>
-								<p className="text-white/35 text-[13px] leading-relaxed transition-colors duration-200 hover:text-white/70">
-									Try 5 dynamic questions without an account.
-									No score saved.
-								</p>
-							</div>
-
-							<div className="flex items-center gap-1 text-white/40 text-[11px] font-medium tracking-widest uppercase opacity-50 group-hover:opacity-100 transition-opacity">
-								<span>Play Now</span>
-								<span className="text-sm">→</span>
-							</div>
-						</div>
-					</Link>
+					<QuizCard
+						href="/quiz/guest"
+						icon={User}
+						iconBoxed
+						title="Play as Guest"
+						description="Try 5 dynamic questions without an account. No score saved."
+						ctaText="Play Now"
+					/>
 				)}
 			</div>
 		</div>
