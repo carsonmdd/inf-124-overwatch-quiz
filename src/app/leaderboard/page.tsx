@@ -72,14 +72,13 @@ const Leaderboard = () => {
 			) : (
 				<ol className="flex flex-col gap-3">
 					{currentPlayers.map((player, i) => (
-						<div key={i}>
-							<LeaderboardCard
-								id={player.id}
-								rank={player.rank}
-								username={player.username}
-								totalScore={player.totalScore}
-							/>
-						</div>
+						<LeaderboardCard
+							key={i}
+							id={player.id}
+							rank={player.rank}
+							username={player.username}
+							totalScore={player.totalScore}
+						/>
 					))}
 				</ol>
 			)}
