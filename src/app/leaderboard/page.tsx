@@ -54,14 +54,14 @@ const Leaderboard = () => {
 			{/* Header */}
 			<div className="flex items-center gap-3 sm:gap-5 border-b border-gray-700/50 pb-4">
 				<Image
-					src="/top500.png"
-					alt="Top 500"
+					src="/top100.png"
+					alt="Top 100"
 					width={60}
 					height={60}
 					className="drop-shadow-md object-contain shrink-0 sm:w-20 sm:h-20"
 				/>
 				<h1 className="text-2xl sm:text-4xl lg:text-5xl font-black uppercase italic tracking-normal sm:tracking-wide lg:tracking-widest leading-tight bg-gradient-to-r from-yellow-400 via-ow-orange to-red-500 bg-clip-text text-transparent pb-1 pr-2">
-					Top 500 Leaderboard
+					Top 100 Leaderboard
 				</h1>
 			</div>
 
