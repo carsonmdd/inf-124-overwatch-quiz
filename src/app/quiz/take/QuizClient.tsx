@@ -143,6 +143,7 @@ const QuizClient = ({ questions, isGuest = false }: Props) => {
 		setCurrIndex(0);
 		setSelectedIndex(null);
 		setHasAnswered(false);
+		setIsSubmitting(false);
 		setScore(0);
 		setCorrectCount(0);
 		setStreak(0);
